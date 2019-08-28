@@ -1,0 +1,9 @@
+export ETCDCTL_API=3
+export ETCDCTL_CACERT=/var/snap/etcd/common/ca.crt
+export ETCDCTL_CERT=/var/snap/etcd/common/client.crt
+export ETCDCTL_KEY=/var/snap/etcd/common/client.key
+
+ENDPOINTS=10.23.23.227:2379,10.23.23.229:2379,10.23.23.230:2379
+
+alias etcdctl="etcdctl --endpoints=${ENDPOINTS}"
+

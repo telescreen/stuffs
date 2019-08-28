@@ -1,0 +1,15 @@
+description: Charmed Kubernetes overlay to add Calico CNI.
+applications:
+  calico:
+    charm: cs:~containers/calico
+    options:
+      #nat-outgoing: true
+      #ipip: false
+  flannel:
+relations:
+- - calico:etcd
+  - etcd:db
+- - calico:cni
+  - kubernetes-master:cni
+- - calico:cni
+  - kubernetes-worker:cni
