@@ -10,10 +10,10 @@ if [ ! -f "$VAULT_FILE" ]; then
   vault operator init -key-shares=5 -key-threshold=3 > ${VAULT_FILE}
 fi
 
-KEY1=grep "Unseal Key 1" ${VAULT_FILE} | awk '{print $4}'
-KEY2=grep "Unseal Key 2" ${VAULT_FILE} | awk '{print $4}'
-KEY3=grep "Unseal Key 3" ${VAULT_FILE} | awk '{print $4}'
-ROOT_TOKEN=grep "Initial Root Token" vaultkeys.txt | awk '{print $4}'
+KEY1=`grep "Unseal Key 1" ${VAULT_FILE} | awk '{print $4}'`
+KEY2=`grep "Unseal Key 2" ${VAULT_FILE} | awk '{print $4}'`
+KEY3=`grep "Unseal Key 3" ${VAULT_FILE} | awk '{print $4}'`
+ROOT_TOKEN=`grep "Initial Root Token" vaultkeys.txt | awk '{print $4}'`
 
 vault operator unseal ${KEY1}
 vault operator unseal ${KEY2}

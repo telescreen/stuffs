@@ -1,0 +1,133 @@
+description: A mini k8s cluster for testing
+
+variables:
+  kubernetes-channel: &kubernetes-channel 1.15/stable
+  vault-vip: &vault-vip  10.23.23.20
+
+machines:
+  '0':
+    constraints: cores=1 mem=2G root-disk=15G
+    series: bionic
+  '1':
+    constraints: cores=1 mem=2G root-disk=12G
+    series: bionic
+  '2':
+    constraints: cores=1 mem=2G root-disk=12G
+    series: bionic
+  '3':
+    constraints: cores=1 mem=1G root-disk=12G
+    series: bionic
+  '4':
+    constraints: cores=1 mem=1G root-disk=12G
+    series: bionic
+  '5':
+    constraints: cores=1 mem=1G root-disk=12G
+    series: bionic
+  '6':
+    constraints: cores=1 mem=1G root-disk=12G
+    series: bionic
+
+services:
+  # Containerd is used as container runtime
+  #containerd:
+  #  charm: cs:~containers/containerd
+  docker:
+    charm: cs:~containers/docker-4
+  etcd:
+    charm: cs:~containers/etcd
+    num_units: 3
+    options:
+      channel: 3.2/stable
+    to:
+    - 1
+    - 2
+    - 3
+  kubeapi-load-balancer:
+    charm: cs:~containers/kubeapi-load-balancer
+    expose: true
+    num_units: 1
+    to: 
+    - 1
+  kubernetes-master:
+    charm: cs:~containers/kubernetes-master-700
+    num_units: 1
+    options:
+      allow-privileged: "true"
+      channel: *kubernetes-channel
+    to:
+    - 1
+  kubernetes-worker:
+    charm: cs:~containers/kubernetes-worker-552
+    expose: true
+    num_units: 2
+    options:
+      ingress: false
+      channel: *kubernetes-channel
+    to:
+    - 2
+    - 3
+  easyrsa:
+   charm: cs:~containers/easyrsa-253
+   num_units: 1
+   to:
+   - 0
+  vault:
+    charm: cs:~openstack-charmers-next/vault
+    num_units: 3
+    options:
+      # this makes Vault act as a self-signed root CA
+      auto-generate-root-ca-cert: true
+      vip: *vault-vip
+    to:
+    - 4
+    - 5
+    - 6
+  percona-cluster:
+    charm: cs:percona-cluster
+    num_units: 1
+    to:
+    - 0
+  hacluster-vault:
+    charm: cs:hacluster-55
+    num_units: 0
+
+relations:
+- - kubernetes-master:kube-api-endpoint
+  - kubeapi-load-balancer:apiserver
+
+- - kubernetes-master:loadbalancer
+  - kubeapi-load-balancer:loadbalancer
+
+- - kubernetes-master:kube-control
+  - kubernetes-worker:kube-control
+
+- - kubernetes-master:etcd
+  - etcd:db
+
+- - kubernetes-worker:kube-api-endpoint
+  - kubeapi-load-balancer:website
+#- - containerd
+#  - kubernetes-worker:container-runtime
+#- - containerd
+#  - kubernetes-master:container-runtime
+- - docker
+  - kubernetes-worker:container-runtime
+- - docker
+  - kubernetes-master:container-runtime
+
+- - kubernetes-master:certificates
+  - vault:certificates
+- - etcd:certificates
+  - easyrsa:client
+- - kubernetes-worker:certificates
+  - vault:certificates
+- - kubeapi-load-balancer:certificates
+  - vault:certificates
+- - vault:shared-db
+  - percona-cluster:shared-db
+- - vault:secrets
+  - kubernetes-master:vault-kv
+- - vault:ha
+  - hacluster-vault
+- - vault:etcd
+  - etcd:db 
