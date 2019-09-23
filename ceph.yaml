@@ -1,42 +1,48 @@
 Description: Mini Ceph cluster for experiment
-series: bionic
-applications:
-  ceph-mon:
-    charm: cs:ceph-mon-38
-    num_units: 1
-    to:
-    - lxd:0
-    bindings:
-      public: external
-  ceph-osd:
-    charm: cs:ceph-osd-285
-    num_units: 3
-    to:
-    - "0"
-    - "1"
-    - "2"
-    bindings:
-      cluster: internal
-      public: external
-    options:
-      osd-devices: /dev/vdb 
-  ceph-radosgw:
-    charm: cs:ceph-radosgw-271
-    num_units: 1
-    to:
-    - lxd:0
-    bindings:
-      admin: external
-      public: external
+
 machines:
   "0":
     constraints: cpu-cores=1 mem=1G root-disk=15G
+    series: bionic
   "1":
     constraints: cpu-cores=1 mem=1G root-disk=15G
+    series: bionic
   "2":
     constraints: cpu-cores=1 mem=1G root-disk=15G
+    series: bionic
+
 relations:
 - - ceph-osd:mon
   - ceph-mon:osd
 - - ceph-radosgw:mon
   - ceph-mon:radosgw
+
+applications:
+  ceph-mon:
+    charm: cs:ceph-mon
+    num_units: 3
+    to:
+    - lxd:0
+    - lxd:1
+    - lxd:2
+    #bindings:
+    #  public: external
+  ceph-osd:
+    charm: cs:ceph-osd
+    num_units: 3
+    to:
+    - "0"
+    - "1"
+    - "2"
+    #bindings:
+    #  cluster: internal
+    #  public: external
+  ceph-radosgw:
+    charm: cs:ceph-radosgw-271
+    num_units: 1
+    to:
+    - lxd:0
+    #bindings:
+    #  admin: external
+    #  public: external
+
