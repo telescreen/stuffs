@@ -25,8 +25,8 @@ applications:
     - lxd:0
     - lxd:1
     - lxd:2
-    #bindings:
-    #  public: external
+    bindings:
+      public: external
   ceph-osd:
     charm: cs:ceph-osd
     num_units: 3
@@ -34,15 +34,15 @@ applications:
     - "0"
     - "1"
     - "2"
-    #bindings:
-    #  cluster: internal
-    #  public: external
+    bindings:
+      cluster: internal
+      public: external
   ceph-radosgw:
-    charm: cs:ceph-radosgw-271
+    charm: cs:ceph-radosgw
     num_units: 1
     to:
     - lxd:0
-    #bindings:
-    #  admin: external
-    #  public: external
+    bindings:
+      admin: external
+      public: external
 

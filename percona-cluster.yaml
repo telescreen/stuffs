@@ -11,7 +11,7 @@ applications:
     - "1"
     - "2"
     options:
-      vip: 10.23.23.15
+      vip: 10.4.88.10
 machines:
   "0": 
     constraints: cores=1 mem=1G root-disk=8G
