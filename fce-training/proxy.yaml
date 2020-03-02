@@ -1,0 +1,12 @@
+version: 1
+config:
+  - type: physical
+    name: eth1
+    subnets:
+      - type: static
+        address: 172.16.224.10/24
+  - type: physical
+    name: eth0
+    subnets:
+      - type: dhcp
+

@@ -1,0 +1,42 @@
+version: 1
+config:
+  - type: physical
+    name: eth0
+    subnets:
+      - type: static
+        address: 172.16.224.3/24
+        gateway4: 172.16.224.1
+        nameservers:
+          search: [alpha.telescreen]
+          addresses: [172.16.224.2]
+  - type: vlan
+    name: eth0.225
+    vlan_link: eth0
+    vlan_id: 225
+    subnets:
+      - type: static
+        address: 172.16.225.3/24
+        #  - type: vlan
+        #    name: eth0.226
+        #    vlan_link: eth0
+        #    vlan_id: 226
+        #  - type: vlan
+        #    name: eth0.227
+        #    vlan_link: eth0
+        #    vlan_id: 227
+        #  - type: vlan
+        #    name: eth0.228
+        #    vlan_link: eth0
+        #    vlan_id: 228
+        #  - type: vlan
+        #    name: eth0.229
+        #    vlan_link: eth0
+        #    vlan_id: 229
+        #  - type: vlan
+        #    name: eth0.230
+        #    vlan_link: eth0
+        #    vlan_id: 230
+        #  - type: vlan
+        #    name: eth0.231
+        #    vlan_link: eth0
+        #    vlan_id: 231

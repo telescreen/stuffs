@@ -1,0 +1,45 @@
+version: 1
+config:
+  - type: physical
+    name: eth0
+    subnets:
+      - type: static
+        address: 172.16.224.4/24
+        gateway: 172.16.224.1
+        dns_nameservers:
+          - 172.16.224.2
+  - type: vlan
+    name: eth0.225
+    vlan_link: eth0
+    vlan_id: 225
+    subnets:
+      - type: static
+        address: 172.16.225.4/24
+  - type: vlan
+    name: eth0.226
+    vlan_link: eth0
+    vlan_id: 226
+    subnets:
+      - type: static
+        address: 172.16.226.4/24
+  - type: vlan
+    name: eth0.227
+    vlan_link: eth0
+    vlan_id: 227
+    subnets:
+      - type: static
+        address: 172.16.227.4/24
+  - type: vlan
+    name: eth0.228
+    vlan_link: eth0
+    vlan_id: 228
+    subnets:
+      - type: static
+        address: 172.16.228.4/24
+  - type: vlan
+    name: eth0.229
+    vlan_link: eth0
+    vlan_id: 229
+    subnets:
+      - type: static
+        address: 172.16.229.4/24
