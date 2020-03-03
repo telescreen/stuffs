@@ -7,7 +7,7 @@ config:
         address: 172.16.224.3/24
         gateway4: 172.16.224.1
         nameservers:
-          search: [alpha.telescreen]
+          search: [alpha.tal]
           addresses: [172.16.224.2]
   - type: vlan
     name: eth0.225

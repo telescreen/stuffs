@@ -17,19 +17,13 @@
 ### Note that the name is shown but cannot be changed
 
 config:
-  raw.lxc: |-
-    lxc.cgroup.devices.allow = c 10:237 rwm
-    lxc.apparmor.profile = unconfined
-    lxc.cgroup.devices.allow = b 7:* rwm
-  security.nesting: true
-  security.privileged: "true"
   user.vendor-data: |
     #cloud-config
     package_update: false
     package_upgrade: false
-    apt:
-      proxy: http://172.16.224.10:3128
-      http_proxy: http://172.16.224.10:3128
+    #apt:
+    #  proxy: http://172.16.224.10:3128
+    #  http_proxy: http://172.16.224.10:3128
     users:
       - name: telescreen
         ssh_authorized_keys:

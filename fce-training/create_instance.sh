@@ -2,7 +2,7 @@
 
 # Variable that need to set before running this script
 MAAS_USER=telescreen
-NET=expbr0
+NET=alpha
 SSH_USER=telescreen
 MAAS_SERVER="172.16.224.3"
 
@@ -12,7 +12,7 @@ NODE_NUM=1
 CPU=1
 MEM=1024
 OS="ubuntu18.04"
-DATA_DISK=0
+NUMBER_DATA_DISK=0
 DATA_DISK_SIZE=10G
 
 while getopts ":t:n:c:m:d:s:" opt; do
@@ -25,17 +25,17 @@ while getopts ":t:n:c:m:d:s:" opt; do
     ;;
     m) MEM="$OPTARG"
     ;;
-    d) DATA_DISK="$OPTARG"
+    d) NUMBER_DATA_DISK="$OPTARG"
     ;;
     s) DATA_DISK_SIZE="$OPTARG"
     ;;
-    \?) echo "create_instance.sh -t TEMPLATE_NAME -n NUMBER_OF_NODE -c CPU_CORE -m MEMORY"
+    \?) echo "create_instance.sh -t TEMPLATE_NAME -n NUMBER_OF_NODE -c CPU_CORE -m MEMORY -d NUMBER_DATADISK -s DATA_DISK_SIZE"
 	echo "Default value: "
 	echo "  TEMPLATE_NAME = node"
 	echo "  NUMBER_OF_NODE = 1"
 	echo "  CPU_CORE = 1"
 	echo "  MEMORY = 1024"
-	echo "  DATA_DISK = 0"
+	echo "  NUMBER_DATA_DISK = 0"
 	echo "  DATA_DISK_SIZE = 10G"
 	exit 1;
     ;;
@@ -45,7 +45,7 @@ done
 for ((NODEID=0; NODEID < $NODE_NUM; NODEID++)); do
 
 # Add data disks	
-for ((DD = 0; DD < $DATA_DISK; DD++)); do
+for ((DD = 0; DD < $NUMBER_DATA_DISK; DD++)); do
   qemu-img create -f qcow2 /vms/${TEMPLATE_NAME}${NODEID}-data${DD}.qcow2 $DATA_DISK_SIZE;
 done
 
@@ -65,7 +65,7 @@ virt-install \
 --os-variant ${OS} \
 --controller=scsi,model=virtio-scsi \
 --disk path=/vms/${TEMPLATE_NAME}${NODEID}-root.qcow2,bus=virtio \
-$(for ((DD = 0; DD < $DATA_DISK; DD++)); do echo --disk path=/vms/${TEMPLATE_NAME}${NODEID}-data${DD}.qcow2,bus=virtio; done) \
+$(for ((DD = 0; DD < $NUMBER_DATA_DISK; DD++)); do echo --disk path=/vms/${TEMPLATE_NAME}${NODEID}-data${DD}.qcow2,bus=virtio; done) \
 --import \
 --network type=bridge,source=${NET},virtualport_type=openvswitch,model=virtio,mac=${MAC_ADDR} \
 --sound none \

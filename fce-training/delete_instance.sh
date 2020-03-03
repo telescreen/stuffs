@@ -29,7 +29,7 @@ for name in $NAME; do
   maas ${MAAS_USER} machine delete ${SYSTEM_ID//\"}
   virsh shutdown $name
   virsh undefine $name
-  if $DELETE_DISK; then
+  if [ "$DELETE_DISK" ]; then
     echo "Deleting disks"
     rm -rf /vms/$name-root.qcow2
     rm -rf /vms/$name-data*.qcow2
