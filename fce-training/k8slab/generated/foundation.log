@@ -1,0 +1,79 @@
+2020-03-04-06:42:05 fce.build INFO List of steps in layer maas:
+2020-03-04-06:42:05 fce.build INFO   maas:preflight
+2020-03-04-06:42:05 fce.build INFO   maas:postgres
+2020-03-04-06:42:05 fce.build INFO   maas:maas_install
+2020-03-04-06:42:05 fce.build INFO   maas:maas_admin_setup
+2020-03-04-06:42:05 fce.build INFO   maas:setup_maas_as_dns
+2020-03-04-06:42:05 fce.build INFO   maas:maas_admin_login
+2020-03-04-06:42:05 fce.build INFO   maas:configure_maas
+2020-03-04-06:42:05 fce.build INFO   maas:configure_networks
+2020-03-04-06:42:05 fce.build INFO   maas:setup_pods
+2020-03-04-06:42:05 fce.build INFO   maas:enlist_nodes
+2020-03-04-06:42:05 fce.build INFO   maas:generate_buckets
+2020-03-04-06:42:05 fce.build INFO   maas:configure_nodes
+2020-03-04-06:42:05 fce.build INFO   maas:deploy_kvm_nodes
+2020-03-04-07:09:24 fce.build INFO List of steps in layer maas:
+2020-03-04-07:09:24 fce.build INFO   maas:preflight
+2020-03-04-07:09:24 fce.build INFO   maas:postgres
+2020-03-04-07:09:24 fce.build INFO   maas:maas_install
+2020-03-04-07:09:24 fce.build INFO   maas:maas_admin_setup
+2020-03-04-07:09:24 fce.build INFO   maas:setup_maas_as_dns
+2020-03-04-07:09:24 fce.build INFO   maas:maas_admin_login
+2020-03-04-07:09:24 fce.build INFO   maas:configure_maas
+2020-03-04-07:09:24 fce.build INFO   maas:configure_networks
+2020-03-04-07:09:24 fce.build INFO   maas:setup_pods
+2020-03-04-07:09:24 fce.build INFO   maas:enlist_nodes
+2020-03-04-07:09:24 fce.build INFO   maas:generate_buckets
+2020-03-04-07:09:24 fce.build INFO   maas:configure_nodes
+2020-03-04-07:09:24 fce.build INFO   maas:deploy_kvm_nodes
+2020-03-04-07:09:39 fce.build INFO Started building layer: maas
+2020-03-04-07:09:39 root ERROR Fatal: Failed to ssh to 'FCE_TEMPLATE' using user 'ubuntu'
+2020-03-04-07:30:07 fce.build INFO Started building layer: maas
+2020-03-04-07:30:07 root ERROR Fatal: Failed to ssh to '172.16.224.2' using user 'ubuntu'
+2020-03-04-07:30:36 fce.build INFO Started building layer: maas
+2020-03-04-07:30:36 root ERROR Fatal: Failed to ssh to '172.16.224.2' using user 'ubuntu'
+2020-03-04-07:31:07 fce.build INFO Started building layer: maas
+2020-03-04-07:31:07 root ERROR Fatal: Failed to ssh to '172.16.224.2' using user 'ubuntu'
+2020-03-04-07:41:57 fce.build INFO List of steps in layer maas:
+2020-03-04-07:41:57 fce.build INFO   maas:preflight
+2020-03-04-07:41:57 fce.build INFO   maas:postgres
+2020-03-04-07:41:57 fce.build INFO   maas:maas_install
+2020-03-04-07:41:57 fce.build INFO   maas:maas_admin_setup
+2020-03-04-07:41:57 fce.build INFO   maas:setup_maas_as_dns
+2020-03-04-07:41:57 fce.build INFO   maas:maas_admin_login
+2020-03-04-07:41:57 fce.build INFO   maas:configure_maas
+2020-03-04-07:41:57 fce.build INFO   maas:configure_networks
+2020-03-04-07:41:57 fce.build INFO   maas:setup_pods
+2020-03-04-07:41:57 fce.build INFO   maas:enlist_nodes
+2020-03-04-07:41:57 fce.build INFO   maas:generate_buckets
+2020-03-04-07:41:57 fce.build INFO   maas:configure_nodes
+2020-03-04-07:41:57 fce.build INFO   maas:deploy_kvm_nodes
+2020-03-04-07:42:06 fce.build INFO Started building layer: maas
+2020-03-04-07:42:06 root ERROR Fatal: Failed to ssh to '172.16.224.2' using user 'ubuntu'
+2020-03-04-07:44:52 fce.build INFO Started building layer: maas
+2020-03-04-07:44:52 root ERROR Fatal: Failed to ssh to '172.16.224.2' using user 'ubuntu'
+2020-03-04-07:45:32 root ERROR Fatal: Failed to ssh to '172.16.224.2' using user 'ubuntu'
+2020-03-04-07:57:08 fce.build INFO Started building layer: baremetal
+2020-03-04-07:57:08 fce.build INFO Finished building layer: baremetal
+2020-03-04-07:57:08 fce.build INFO Started validating layer: baremetal
+2020-03-04-07:57:08 fce.build INFO Finished validating layer: baremetal
+2020-03-04-07:57:08 fce.build INFO Started building layer: maas
+2020-03-04-07:57:08 root ERROR Fatal: Failed to ssh to '172.16.224.2' using user 'ubuntu'
+2020-03-04-08:50:30 fce.build INFO List of steps in layer maas:
+2020-03-04-08:50:30 fce.build INFO   maas:preflight
+2020-03-04-08:50:30 fce.build INFO   maas:postgres
+2020-03-04-08:50:30 fce.build INFO   maas:maas_install
+2020-03-04-08:50:30 fce.build INFO   maas:maas_admin_setup
+2020-03-04-08:50:30 fce.build INFO   maas:setup_maas_as_dns
+2020-03-04-08:50:30 fce.build INFO   maas:maas_admin_login
+2020-03-04-08:50:30 fce.build INFO   maas:configure_maas
+2020-03-04-08:50:30 fce.build INFO   maas:configure_networks
+2020-03-04-08:50:30 fce.build INFO   maas:setup_pods
+2020-03-04-08:50:30 fce.build INFO   maas:enlist_nodes
+2020-03-04-08:50:30 fce.build INFO   maas:generate_buckets
+2020-03-04-08:50:30 fce.build INFO   maas:configure_nodes
+2020-03-04-08:50:30 fce.build INFO   maas:deploy_kvm_nodes
+2020-03-04-08:50:51 fce.build INFO Started building layer: maas
+2020-03-04-08:50:51 root ERROR Fatal: Failed to ssh to '172.16.224.2' using user 'ubuntu'
+2020-03-04-08:51:10 fce.build INFO Started building layer: maas
+2020-03-04-08:51:10 root ERROR Fatal: Failed to ssh to '172.16.224.3' using user 'ubuntu'

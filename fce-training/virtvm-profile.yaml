@@ -18,7 +18,11 @@
 
 config:
   linux.kernel_modules: iptable_nat, ip6table_nat, ebtables, openvswitch, kvm, kvm_intel, tap, vhost, vhost_net, vhost_scsi, vhost_vsock
-  raw.lxc: lxc.apparmor.profile = unconfined
+  raw.lxc: |-
+    lxc.apparmor.profile = unconfined
+    lxc.cgroup.devices.allow = a
+    lxc.mount.auto=proc:rw sys:rw
+    lxc.cap.drop=
   security.privileged: "true"
   user.user-data: |
     #cloud-config
@@ -39,7 +43,7 @@ config:
 description: LXD profile to run libvirt on lxd
 devices:
   eth0:
-    name: eth0
+    name: broam
     nictype: bridged
     parent: alpha
     type: nic

@@ -1,0 +1,47 @@
+fabrics:
+  fabric-0:
+    vlans:
+      0:
+        dhcp_on: true
+        mtu: 1500
+        space: oam-space
+        subnets:
+          oam:
+            cidr: 172.16.224.0/24
+            gateway_ip: 172.16.224.1
+            reserved:
+              dhcp:
+                end_ip: 172.16.224.254
+                start_ip: 172.16.224.200
+                type: dynamic
+              manual:
+                end_ip: 172.16.224.50
+                start_ip: 172.16.224.1
+      225:
+        mtu: 1500
+        space: external-space
+        subnets:
+          external:
+            cidr: 172.16.225.0/24
+            reserved:
+              manual:
+                end_ip: 172.16.225.50
+                start_ip: 172.16.225.1
+      226:
+        mtu: 1500
+        space: internal-space
+        subnets:
+          internal: 
+            cidr: 172.16.226.0/24
+            reserved:
+              manual:
+                end_ip: 172.16.226.50
+                start_ip: 172.16.226.1
+
+spaces:
+  oam-space:
+    description: Operations, administration and management. PXE and stuff.
+  external-space:
+    description: External Network
+  internal-space:
+    description: Internal Network

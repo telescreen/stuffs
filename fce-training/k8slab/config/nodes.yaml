@@ -1,0 +1,29 @@
+# List 9 nodes here
+# Example:
+# - obayifo:
+#   bmc_user: Administrator
+#   bmc_password: potatos
+#   power_type: ipmi
+#   bmc_address: 192.168.224.63
+#   bmc_power_boot_type: efi
+#   zone: zone3
+hc0:
+    power_id: hc0
+    power_type: virsh
+    bmc_address: qemu+ssh://telescreen@172.16.224.2/system
+    zone: alpha
+hc1:
+    power_id: hc1
+    power_type: virsh
+    bmc_address: qemu+ssh://telescreen@172.16.224.2/system
+    zone: alpha
+hc2:
+    power_id: hc2
+    power_type: virsh
+    bmc_address: qemu+ssh://telescreen@172.16.224.2/system
+    zone: alpha
+hc3:
+    power_id: hc3
+    power_type: virsh
+    bmc_address: qemu+ssh://telescreen@172.16.224.2/system
+    zone: alpha
