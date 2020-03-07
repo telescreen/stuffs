@@ -27,7 +27,7 @@ config:
     package_upgrade: false
     users:
       - default
-      - name: telescreen
+      - name: ubuntu
         sudo: ALL=(ALL) NOPASSWD:ALL
         ssh_authorized_keys:
         - ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAAsipJH2s+XYyLHo3GC4n6yQ0eH9OSr5sRntOFEZoqXg12f8Suf1dfHjWs62f11TW9kjYrzs4/pRxP0fCeRaA+cDgDGEl9pzo/myryLepN2nGpEAnXb4V7IRNTCwXdTMxQr/h/nwZVMryiLGvWNcwTYIOO8i2fDZlSifG38CZx7B+byDA== telescreen@ha-xps

@@ -8,11 +8,3 @@ config:
         gateway: 172.16.224.1
         dns_nameservers:
           - 8.8.8.8
-  - type: vlan
-    name: eth0.225
-    vlan_link: eth0
-    vlan_id: 225
-    subnets:
-      - type: static
-        address: 172.16.225.2/24
-

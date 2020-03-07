@@ -16,8 +16,6 @@ clean_up () {
   lxc profile delete maas
   lxc profile delete virtvm
   #lxc profile delete proxy
-  
-  lxc config device remove maas maas5240 proxy connect=tcp:172.16.224.2:5240 listen=tcp:0.0.0.0:5240
 }
 
 create_new () {
@@ -34,9 +32,7 @@ create_new () {
   lxc launch ubuntu:18.04 -p virtvm virtvm --config=user.network-config="$(cat virtvm.yaml)"
   lxc launch ubuntu:18.04 -p maas jujuws --config=user.network-config="$(cat jujuws.yaml)"
   #lxc launch ubuntu:18.04 -p proxy proxy --config=user.network-config="$(cat proxy.yaml)"
-
   lxc config device add maas maas5240 proxy connect=tcp:172.16.224.2:5240 listen=tcp:0.0.0.0:5240
-
 }
 
 if [ $# -eq 0 ]; then
