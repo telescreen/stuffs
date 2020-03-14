@@ -1,2 +1,53 @@
-# FCE_TEMPLATE
-# Replace this with a hand written or generated buckets config.
+allocations:
+  hyperconverged:
+    machines:
+      - hc0.maas
+
+configs:
+  hyperconverged:
+    nics:
+    - id: ens0
+      nic: 0
+      name: ens0
+      type: physical
+      mtu: 1500
+      fabric: fabric-0
+      vlan_id: 0
+      subnets: ['oam']
+    - id: ens1
+      nic: 1
+      name: ens1
+      type: physical
+      mtu: 1500
+      fabric: fabric-0
+      vlan_id: 225
+      subnets: ['external']
+    - id: ens2
+      nic: 1
+      name: ens2
+      type: physical
+      mtu: 1500
+      fabric: fabric-0
+      vlan_id: 225
+      subnets: ['internal']
+
+    disks:
+    - id: vda
+      type: disk
+      disk: 0
+      ptable: MBR
+    - id: vda-part1
+      type: partition
+      device: vda
+      number: 1
+      size: 16G
+    - id: vda-part1-format
+      type: format
+      fstype: ext4
+      label: root
+      volume: vda-part1
+    - id: vda-part1-mount
+      type: mount
+      device: vda-part1-format
+      path: /
+

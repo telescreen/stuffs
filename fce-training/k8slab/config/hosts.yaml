@@ -1,5 +1,4 @@
 - hostname: maas
-  user: telescreen
   ip: 172.16.224.2
   vm_zone: alpha
   pods:

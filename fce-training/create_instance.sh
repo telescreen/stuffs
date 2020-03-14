@@ -4,7 +4,7 @@
 MAAS_USER=telescreen
 NET=alpha
 SSH_USER=telescreen
-MAAS_SERVER="172.16.224.3"
+VIRT_SERVER="172.16.224.1"
 
 # Default values for argument variables
 NAME="node"
@@ -45,6 +45,10 @@ for ((DD = 0; DD < $NUMBER_DATA_DISK; DD++)); do
 done
 
 MAC_ADDR=`date | md5sum | sed 's/^\(..\)\(..\)\(..\)\(..\)\(..\).*$/02:\1:\2:\3:\4:\5/'`
+sleep 1
+MAC_ADDR225=`date | md5sum | sed 's/^\(..\)\(..\)\(..\)\(..\)\(..\).*$/02:\1:\2:\3:\4:\5/'`
+sleep 1
+MAC_ADDR226=`date | md5sum | sed 's/^\(..\)\(..\)\(..\)\(..\)\(..\).*$/02:\1:\2:\3:\4:\5/'`
 
 # Create datadisk
 qemu-img create -f qcow2 /vms/${NAME}-root.qcow2 15G
@@ -59,7 +63,7 @@ virt-install \
 --cpu host-model \
 --os-variant ${OS} \
 --controller=scsi,model=virtio-scsi \
---disk path=/vms/${NAME}-root.qcow2,bus=virtio \
+--disk path=/vms/${NAME}-root.qcow2,bus=scsi \
 $(for ((DD = 0; DD < $NUMBER_DATA_DISK; DD++)); do echo --disk path=/vms/${NAME}-data${DD}.qcow2,bus=virtio; done) \
 --import \
 --network type=bridge,source=${NET},virtualport_type=openvswitch,model=virtio,mac=${MAC_ADDR} \
@@ -68,5 +72,8 @@ $(for ((DD = 0; DD < $NUMBER_DATA_DISK; DD++)); do echo --disk path=/vms/${NAME}
 --noautoconsole; \
 virsh destroy ${NAME}
 
-maas $MAAS_USER machines create hostname=${NAME} architecture=amd64/generic mac_addresses=$MAC_ADDR power_type=virsh power_parameters="{\"power_address\": \"qemu+ssh://$SSH_USER@$MAAS_SERVER/system\", \"power_id\": \"${NAME}\"}"
+#--network type=bridge,source=${NET}-225,virtualport_type=openvswitch,model=virtio,mac=${MAC_ADDR225} \
+#--network type=bridge,source=${NET}-226,virtualport_type=openvswitch,model=virtio,mac=${MAC_ADDR226} \
+
+#maas $MAAS_USER machines create hostname=${NAME} architecture=amd64/generic mac_addresses=$MAC_ADDR power_type=virsh power_parameters="{\"power_address\": \"qemu+ssh://$SSH_USER@$VIRT_SERVER/system\", \"power_id\": \"${NAME}\"}"
 

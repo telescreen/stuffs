@@ -77,3 +77,96 @@
 2020-03-04-08:50:51 root ERROR Fatal: Failed to ssh to '172.16.224.2' using user 'ubuntu'
 2020-03-04-08:51:10 fce.build INFO Started building layer: maas
 2020-03-04-08:51:10 root ERROR Fatal: Failed to ssh to '172.16.224.3' using user 'ubuntu'
+2020-03-14-15:46:29 root DEBUG FCE version: 2.5.0+git.47.g7b7d59d
+2020-03-14-15:46:29 fce.baremetal DEBUG Schema found for baremetal
+2020-03-14-15:46:29 fce.maas DEBUG Schema found for maas
+2020-03-14-15:46:29 fce.juju_maas_controller DEBUG Schema found for juju_maas_controller
+2020-03-14-15:46:29 fce.kubernetes DEBUG Schema found for kubernetes
+2020-03-14-15:46:29 fce.root DEBUG Schema found for root
+2020-03-14-15:46:29 fce.root DEBUG Checking schema for root
+2020-03-14-15:46:29 fce.root DEBUG Finished checking schema for root
+2020-03-14-15:46:29 fce.baremetal DEBUG Checking schema for baremetal
+2020-03-14-15:46:29 fce.baremetal DEBUG Finished checking schema for baremetal
+2020-03-14-15:46:29 fce.maas DEBUG Checking schema for maas
+2020-03-14-15:46:29 fce.maas DEBUG *** Schema validation failed: 'disks' is a required property
+2020-03-14-15:46:29 fce.maas DEBUG     Error in ['nodeconfig', 'configs', 'hyperconverged']
+2020-03-14-15:46:29 fce.maas DEBUG     Failed validator: required
+2020-03-14-15:46:29 fce.maas DEBUG     Failed value: ['nics', 'disks']
+2020-03-14-15:46:29 fce.maas DEBUG Finished checking schema for maas
+2020-03-14-15:46:29 fce.juju_maas_controller DEBUG Checking schema for juju_maas_controller
+2020-03-14-15:46:29 fce.juju_maas_controller DEBUG Finished checking schema for juju_maas_controller
+2020-03-14-15:46:29 fce.kubernetes DEBUG Checking schema for kubernetes
+2020-03-14-15:46:29 fce.kubernetes DEBUG Finished checking schema for kubernetes
+2020-03-14-15:46:29 root DEBUG Running 'zone' project check
+2020-03-14-15:46:29 root WARNING ["There must be at least three zones and there must be odd number of zones. Zones found: {'alpha'}"]
+2020-03-14-15:46:29 fce.build INFO Started building layer: maas
+2020-03-14-15:46:29 root ERROR Fatal: Failed to ssh to '172.16.224.1' using user 'ubuntu'
+2020-03-14-15:47:14 root DEBUG FCE version: 2.5.0+git.47.g7b7d59d
+2020-03-14-15:47:14 fce.baremetal DEBUG Schema found for baremetal
+2020-03-14-15:47:14 fce.maas DEBUG Schema found for maas
+2020-03-14-15:47:14 fce.juju_maas_controller DEBUG Schema found for juju_maas_controller
+2020-03-14-15:47:14 fce.kubernetes DEBUG Schema found for kubernetes
+2020-03-14-15:47:14 fce.root DEBUG Schema found for root
+2020-03-14-15:47:14 fce.root DEBUG Checking schema for root
+2020-03-14-15:47:14 fce.root DEBUG Finished checking schema for root
+2020-03-14-15:47:14 fce.baremetal DEBUG Checking schema for baremetal
+2020-03-14-15:47:14 fce.baremetal DEBUG *** Schema validation failed: Additional properties are not allowed ('user' was unexpected)
+2020-03-14-15:47:14 fce.baremetal DEBUG     Error in ['hosts', 0]
+2020-03-14-15:47:14 fce.baremetal DEBUG     Failed validator: additionalProperties
+2020-03-14-15:47:14 fce.baremetal DEBUG     Failed value: False
+2020-03-14-15:47:14 fce.baremetal DEBUG Finished checking schema for baremetal
+2020-03-14-15:47:14 fce.maas DEBUG Checking schema for maas
+2020-03-14-15:47:14 fce.maas DEBUG *** Schema validation failed: 'disks' is a required property
+2020-03-14-15:47:14 fce.maas DEBUG     Error in ['nodeconfig', 'configs', 'hyperconverged']
+2020-03-14-15:47:14 fce.maas DEBUG     Failed validator: required
+2020-03-14-15:47:14 fce.maas DEBUG     Failed value: ['nics', 'disks']
+2020-03-14-15:47:14 fce.maas DEBUG Finished checking schema for maas
+2020-03-14-15:47:14 fce.juju_maas_controller DEBUG Checking schema for juju_maas_controller
+2020-03-14-15:47:14 fce.juju_maas_controller DEBUG Finished checking schema for juju_maas_controller
+2020-03-14-15:47:14 fce.kubernetes DEBUG Checking schema for kubernetes
+2020-03-14-15:47:14 fce.kubernetes DEBUG Finished checking schema for kubernetes
+2020-03-14-15:47:14 root DEBUG Running 'zone' project check
+2020-03-14-15:47:14 root WARNING ["There must be at least three zones and there must be odd number of zones. Zones found: {'alpha'}"]
+2020-03-14-15:47:14 fce.build INFO Started building layer: maas
+2020-03-14-15:47:14 root ERROR Fatal: Failed to ssh to '172.16.224.1' using user 'ubuntu'
+2020-03-14-15:51:00 root DEBUG FCE version: 2.5.0+git.47.g7b7d59d
+2020-03-14-15:51:00 fce.baremetal DEBUG Schema found for baremetal
+2020-03-14-15:51:00 fce.maas DEBUG Schema found for maas
+2020-03-14-15:51:00 fce.juju_maas_controller DEBUG Schema found for juju_maas_controller
+2020-03-14-15:51:00 fce.kubernetes DEBUG Schema found for kubernetes
+2020-03-14-15:51:00 fce.root DEBUG Schema found for root
+2020-03-14-15:51:00 fce.root DEBUG Checking schema for root
+2020-03-14-15:51:00 fce.root DEBUG Finished checking schema for root
+2020-03-14-15:51:00 fce.baremetal DEBUG Checking schema for baremetal
+2020-03-14-15:51:00 fce.baremetal DEBUG Finished checking schema for baremetal
+2020-03-14-15:51:00 fce.maas DEBUG Checking schema for maas
+2020-03-14-15:51:00 fce.maas DEBUG *** Schema validation failed: 'disks' is a required property
+2020-03-14-15:51:00 fce.maas DEBUG     Error in ['nodeconfig', 'configs', 'hyperconverged']
+2020-03-14-15:51:00 fce.maas DEBUG     Failed validator: required
+2020-03-14-15:51:00 fce.maas DEBUG     Failed value: ['nics', 'disks']
+2020-03-14-15:51:00 fce.maas DEBUG Finished checking schema for maas
+2020-03-14-15:51:00 fce.juju_maas_controller DEBUG Checking schema for juju_maas_controller
+2020-03-14-15:51:00 fce.juju_maas_controller DEBUG Finished checking schema for juju_maas_controller
+2020-03-14-15:51:00 fce.kubernetes DEBUG Checking schema for kubernetes
+2020-03-14-15:51:00 fce.kubernetes DEBUG Finished checking schema for kubernetes
+2020-03-14-15:51:00 root DEBUG Running 'zone' project check
+2020-03-14-15:51:00 root WARNING ["There must be at least three zones and there must be odd number of zones. Zones found: {'alpha'}"]
+2020-03-14-15:51:00 fce.build INFO Started building layer: maas
+2020-03-14-15:51:01 fce.maas INFO Parsed a valid vip 172.16.224.2
+2020-03-14-15:51:01 fce.maas INFO Starting step: maas:preflight
+2020-03-14-15:51:01 root INFO /home/telescreen/Workspace/cpe-foundation/foundationcloudengine/foundationcloudengine/templates/remote/tune-bcache.service -> 172.16.224.2:/lib/systemd/system/tune-bcache.service
+2020-03-14-15:51:05 root INFO /home/telescreen/Workspace/cpe-foundation/foundationcloudengine/foundationcloudengine/templates/remote/tune-bcache -> 172.16.224.2:/usr/local/bin/tune-bcache
+2020-03-14-15:51:09 root DEBUG [root@172.16.224.2]: systemctl daemon-reload
+2020-03-14-15:51:10 root DEBUG [root@172.16.224.2]: systemctl enable tune-bcache.service
+2020-03-14-15:51:10 root DEBUG [root@172.16.224.2]: systemctl start tune-bcache.service
+2020-03-14-15:51:11 root DEBUG [root@172.16.224.2]: cut -d\# -f1 /etc/apt/sources.list |            grep -qs \.archive.ubuntu.com ; echo $?
+2020-03-14-15:51:12 root DEBUG [root@172.16.224.2]: sed -i -e 's|[a-z]\+\.archive.ubuntu.com|archive.ubuntu.com|' /etc/apt/sources.list
+2020-03-14-15:51:12 root DEBUG Adding repo using the following command: add-apt-repository -k https://keyserver.ubuntu.com/ --yes "ppa:maas/2.7"
+2020-03-14-15:51:12 root DEBUG [root@172.16.224.2]: add-apt-repository -k https://keyserver.ubuntu.com/ --yes "ppa:maas/2.7"
+2020-03-14-15:51:33 root ERROR [root@172.16.224.2] Command failed: ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR ubuntu@172.16.224.2 -- sudo 'bash -c '"'"'add-apt-repository -k https://keyserver.ubuntu.com/ --yes "ppa:maas/2.7"'"'"''
+2020-03-14-15:51:33 root ERROR [root@172.16.224.2] STDOUT follows:
+Cannot add PPA: 'ppa:~maas/ubuntu/2.7'.
+ERROR: '~maas' user or team does not exist.
+
+2020-03-14-15:51:33 root ERROR [root@172.16.224.2] STDERR follows:
+None

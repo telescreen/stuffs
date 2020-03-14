@@ -21,7 +21,7 @@ config:
   raw.lxc: |-
     lxc.apparmor.profile = unconfined
     lxc.cgroup.devices.allow = a
-    lxc.mount.auto=proc:rw sys:rw
+    #lxc.mount.auto=proc:rw sys:rw
     lxc.cap.drop=
   security.privileged: "true"
   user.user-data: |
@@ -43,7 +43,7 @@ config:
 description: LXD profile to run libvirt on lxd
 devices:
   eth0:
-    name: broam
+    name: eth0
     nictype: bridged
     parent: alpha
     type: nic
