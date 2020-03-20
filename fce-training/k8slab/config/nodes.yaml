@@ -7,23 +7,33 @@
 #   bmc_address: 192.168.224.63
 #   bmc_power_boot_type: efi
 #   zone: zone3
+ctl:
+    power_id: ctl
+    power_type: virsh
+    bmc_address: qemu+ssh://ubuntu@172.16.224.3/system
+    zone: default
 hc0:
     power_id: hc0
     power_type: virsh
-    bmc_address: qemu+ssh://telescreen@172.16.224.2/system
-    zone: alpha
+    bmc_address: qemu+ssh://ubuntu@172.16.224.3/system
+    zone: default
 hc1:
     power_id: hc1
     power_type: virsh
-    bmc_address: qemu+ssh://telescreen@172.16.224.2/system
-    zone: alpha
+    bmc_address: qemu+ssh://ubuntu@172.16.224.3/system
+    zone: default
 hc2:
     power_id: hc2
     power_type: virsh
-    bmc_address: qemu+ssh://telescreen@172.16.224.2/system
-    zone: alpha
+    bmc_address: qemu+ssh://ubuntu@172.16.224.3/system
+    zone: default
 hc3:
     power_id: hc3
     power_type: virsh
-    bmc_address: qemu+ssh://telescreen@172.16.224.2/system
-    zone: alpha
+    bmc_address: qemu+ssh://ubuntu@172.16.224.3/system
+    zone: default
+hc4:
+    power_id: hc4
+    power_type: virsh
+    bmc_address: qemu+ssh://ubuntu@172.16.224.3/system
+    zone: default

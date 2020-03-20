@@ -2,8 +2,46 @@ allocations:
   hyperconverged:
     machines:
       - hc0.maas
+      - hc1.maas
+      - hc2.maas
+      - hc3.maas
+      - hc4.maas
+ 
+  jujuctl:
+    machines:
+      - ctl.maas
 
 configs:
+  jujuctl:
+    nics:
+    - id: ens0
+      nic: 0
+      name: ens0
+      type: physical
+      mtu: 1500
+      fabric: fabric-0
+      vlan_id: 0
+      subnets: ['oam']
+    disks:
+    - id: vda
+      type: disk
+      disk: 0
+      ptable: MBR
+    - id: vda-part1
+      type: partition
+      device: vda
+      number: 1
+      size: 16G
+    - id: vda-part1-format
+      type: format
+      fstype: ext4
+      label: root
+      volume: vda-part1
+    - id: vda-part1-mount
+      type: mount
+      device: vda-part1-format
+      path: /
+
   hyperconverged:
     nics:
     - id: ens0
@@ -23,12 +61,12 @@ configs:
       vlan_id: 225
       subnets: ['external']
     - id: ens2
-      nic: 1
+      nic: 2
       name: ens2
       type: physical
       mtu: 1500
       fabric: fabric-0
-      vlan_id: 225
+      vlan_id: 226
       subnets: ['internal']
 
     disks:

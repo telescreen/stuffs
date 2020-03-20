@@ -3,9 +3,9 @@
 clean_up () {
   # Stop old vms
   lxc stop maas
-  #lxc stop virtvm
+  lxc stop virtvm
   
-  #lxc delete virtvm
+  lxc delete virtvm
   lxc delete maas
   
   # Delete old profiles
@@ -19,7 +19,7 @@ create_new () {
 
   # Launch VMs
   lxc launch ubuntu:18.04 -p virtvm maas --config=user.network-config="$(cat maas.yaml)"
-  #lxc launch ubuntu:18.04 -p virtvm virtvm --config=user.network-config="$(cat virtvm.yaml)"
+  lxc launch ubuntu:18.04 -p virtvm virtvm --config=user.network-config="$(cat virtvm.yaml)"
   #lxc config device add maas maas5240 proxy connect=tcp:172.16.224.2:5240 listen=tcp:0.0.0.0:5240
 }
 

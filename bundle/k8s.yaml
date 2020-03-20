@@ -16,16 +16,16 @@ machines:
   '3':
     constraints: cores=1 mem=2G root-disk=12G
     series: bionic
-  '4':
-    constraints: cores=1 mem=2G root-disk=12G
-    series: bionic
+    #'4':
+    #  constraints: cores=1 mem=2G root-disk=12G
+    #  series: bionic
 
 services:
-  nfs:
-    charm: nfs
-    num_units: 1
-    to:
-    - 4
+        #nfs:
+        #  charm: nfs
+        #  num_units: 1
+        # to:
+        #  - 4
   # Containerd is used as container runtime
   containerd:
     charm: cs:~containers/containerd
@@ -85,7 +85,6 @@ relations:
     #- - kubeapi-load-balancer:certificates
     #  - easyrsa:client
 
-
 - - kubernetes-master:kube-control
   - kubernetes-worker:kube-control
 - - kubernetes-master:certificates
@@ -104,8 +103,8 @@ relations:
 - - containerd
   - kubernetes-master:container-runtime
 
-- - nfs
-  - kubernetes-worker:nfs
+    #- - nfs
+    #  - kubernetes-worker:nfs
 
 #- - docker
 #  - kubernetes-worker:container-runtime
