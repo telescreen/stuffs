@@ -14,7 +14,7 @@ countdown() {
         sleep 0.1
     done
     sqlite3 $DB "INSERT INTO timerecord VALUES (\"$(date +"%Y/%m/%d %H:%M:%S")\", \"$1\")"
-    aquote=$(curl -s 'https://api.quotable.io/random' | jq -r '.content')
+    aquote=$(curl -s 'https://api.quotable.io/random' | jq -r '.content, .author')
     notify-send -u critical -i /usr/share/pixmaps/pstree32.xpm "$(date +"%H:%M:%S"): $2" "$aquote"
 }
 
