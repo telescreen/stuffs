@@ -1,0 +1,22 @@
+#!/bin/bash
+
+DB=$(pwd)/pomodoro.db
+if [ ! -f $DB ]; then
+  sqlite3 $DB "CREATE TABLE timerecord ( record_time text, duration text);" 
+fi
+
+# Count down $1 number of seconds
+countdown() {
+    start="$(( $(date +%s) + $1))"
+    while [ "$start" -ge $(date +%s) ]; do
+        days="$(($(($(( $start - $(date +%s) )) * 1 )) / 86400))"
+        time="$(( $start - `date +%s` ))"
+        sleep 0.1
+    done
+    sqlite3 $DB "INSERT INTO timerecord VALUES (\"$(date +"%Y/%m/%d %H:%M:%S")\", \"$1\")"
+    aquote=$(curl -s 'https://api.quotable.io/random' | jq -r '.content')
+    notify-send -u critical -i /usr/share/pixmaps/pstree32.xpm "$(date +"%H:%M:%S"): $2" "$aquote"
+}
+
+countdown $1 "Time to take a break"
+

@@ -1,8 +1,0 @@
-- hostname: maas
-  ip: 172.16.224.2
-  vm_zone: alpha
-  pods:
-  - name: juju
-    disk: 16G
-    cpu: 1
-    mem: 2G

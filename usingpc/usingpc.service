@@ -1,0 +1,12 @@
+[Unit]
+Description=Check whether there is a person in front of the running PC
+RefuseManualStart=no
+RefuseManualStop=yes
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/telescreen/stuffs/usingpc
+ExecStart=/home/telescreen/stuffs/usingpc/usingpc
+
+[Install]
+WantedBy=multi-user.target

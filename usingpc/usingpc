@@ -1,0 +1,20 @@
+#!/bin/bash
+# Dependency: opencv-python, ffmpeg, webcamera
+
+DB=$(pwd)/usingpc.db
+if [ ! -f $DB ]; then
+  sqlite3 $DB "CREATE TABLE usingpc ( pcname text, record_time text, using_pc bool);" 
+fi
+
+ffmpeg -loglevel panic -f v4l2 -i /dev/video0 -vf "eq=gamma=0.7:brightness=-0.2:contrast=1.5" -frames 1 -y /tmp/output.jpg
+
+HAS_FACE=$(python3 ./face_detection.py)
+HOSTNAME=$(hostname)
+RECORDTIME=$(date +"%Y/%m/%d %H:%M:%S")
+
+if [ "$HAS_FACE" = "yes" ]; then
+  sqlite3 $DB "INSERT INTO usingpc VALUES (\"$HOSTNAME\", \"$RECORDTIME\", true)"
+else
+  sqlite3 $DB "INSERT INTO usingpc VALUES (\"$HOSTNAME\", \"$RECORDTIME\", false)"
+fi
+
