@@ -1,2 +1,4 @@
 *.db
 crawlers/*.json
+crawlers/*.csv
+crawlers/*.xls
