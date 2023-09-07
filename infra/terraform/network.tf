@@ -1,12 +1,12 @@
 ## Network ##
-resource "openstack_networking_network_v2" "test_network" {
+resource "openstack_networking_network_v2" "network" {
   name           = var.network_config.name
   admin_state_up = "true"
 }
 
-resource "openstack_networking_subnet_v2" "subnet_test_network" {
+resource "openstack_networking_subnet_v2" "subnet" {
   name       = "${var.network_config.name}_subnet"
-  network_id = openstack_networking_network_v2.test_network.id
+  network_id = openstack_networking_network_v2.network.id
   cidr       = var.network_config.cidr
   allocation_pool {
     start = var.network_config.start_ip
@@ -18,16 +18,16 @@ resource "openstack_networking_subnet_v2" "subnet_test_network" {
 
 resource "openstack_networking_router_interface_v2" "add_network_to_provider_router" {
   router_id = var.provider_router_id
-  subnet_id = openstack_networking_subnet_v2.subnet_test_network.id
+  subnet_id = openstack_networking_subnet_v2.subnet.id
 }
 
 
-resource "openstack_networking_secgroup_v2" "test_network_secgroup" {
+resource "openstack_networking_secgroup_v2" "secgroup" {
   name        = "${var.network_config.name}_secgroup"
   description = "a security group for test network"
 }
 
-resource "openstack_networking_secgroup_rule_v2" "test_network_secgroup_rule" {
+resource "openstack_networking_secgroup_rule_v2" "secgroup_rule" {
   for_each          = var.secgroup_rules
   direction         = each.value.direction
   ethertype         = "IPv4"
@@ -35,6 +35,6 @@ resource "openstack_networking_secgroup_rule_v2" "test_network_secgroup_rule" {
   port_range_min    = each.value.port_range_min
   port_range_max    = each.value.port_range_max
   remote_ip_prefix  = each.value.remote_ip_prefix
-  security_group_id = openstack_networking_secgroup_v2.test_network_secgroup.id
+  security_group_id = openstack_networking_secgroup_v2.secgroup.id
 }
 
