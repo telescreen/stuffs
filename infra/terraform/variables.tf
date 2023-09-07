@@ -10,6 +10,7 @@ variable "network_config" {
     start_ip = string
     end_ip = string
     secgroup = string
+    enable_dhcp = string
   })
   default = {
     name = "test_network"
@@ -17,6 +18,7 @@ variable "network_config" {
     start_ip = "10.6.0.10"
     end_ip = "10.6.0.200"
     secgroup = "test_network_secgroup"
+    enable_dhcp = false
   }
 }
 
@@ -51,7 +53,12 @@ variable "secgroup_rules" {
 
 variable "server_count" {
   type = number
-  default = 3
+  default = 1
+}
+
+variable "windows_server_count" {
+  type = number
+  default = 1
 }
 
 variable "server_config" {
@@ -64,9 +71,9 @@ variable "server_config" {
   })
   default = {
     name = "server"
-    image = "auto-sync/ubuntu-focal-daily-amd64-server-20211015-disk1.img"
-    win_image = "Windows2012-virtio"
-    flavor = "m1.large"
+    image = "auto-sync/ubuntu-focal-daily-amd64-server-20230110-disk1.img"
+    win_image = "Windows2019-virtio"
+    flavor = "m1.2xlarge"
     key_name = "testkey"
   }
 }
