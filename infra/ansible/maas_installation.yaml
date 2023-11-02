@@ -1,0 +1,42 @@
+---
+- name: Install MAAS
+  hosts: maas
+  become: true
+  tasks:
+    - name: Install Necessary Packages
+      ansible.builtin.apt:
+        pkg: 
+        - acl
+    - name: Install MAAS from Snap 3.2/stable
+      community.general.snap:
+        name: maas
+        channel: 3.2/stable
+    - name: Install Postgres
+      ansible.builtin.apt:
+        pkg: 
+        - postgresql
+        - postgresql-contrib
+        - python3-psycopg2
+    - name: Create postgres maas user
+      become_user: postgres
+      community.postgresql.postgresql_user:
+        name: maas
+        password: password
+      environment:
+        PGOPTIONS: "-c password_encryption=scram-sha-256"
+    - name: Create maasdb database
+      become_user: postgres
+      community.postgresql.postgresql_db:
+        name: maasdb
+        owner: maas
+    - name: Add permission to login maasdb from localhost
+      ansible.builtin.lineinfile:
+        path: /etc/postgresql/14/main/pg_hba.conf
+        line: "host    maasdb    maas    0/0     scram-sha-256"
+        insertafter: EOF
+        regexp: "^host\t*maasdb"
+    - name: Initialize MAAS
+      ansible.builtin.expect:
+        command: "sudo maas init region+rack --database-uri postgres://maas:password@localhost/maasdb"
+        responses:
+          "MAAS URL.*": \n
