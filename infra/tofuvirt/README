@@ -1,0 +1,14 @@
+#### How to run
+
+1) Install opentofu
+
+```bash
+sudo snap install --classic opentofu
+tofu -v
+```
+
+2) Install plugin
+
+```bash
+tofu init
+```

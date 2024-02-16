@@ -2,3 +2,7 @@
 crawlers/*.json
 crawlers/*.csv
 crawlers/*.xls
+
+*.tfstate
+*.tfstate.*
+.terraform*
