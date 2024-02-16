@@ -26,7 +26,6 @@ resource "libvirt_cloudinit_disk" "commoninit" {
 #  source = var.image.url
 #  format = "qcow2"
 #}
-
 #resource "libvirt_volume" "rootdisk" {
 #  count          = var.server.count
 #  name           = "${var.server.name}${count.index}-root-disk.qcow2"
@@ -41,19 +40,22 @@ resource "libvirt_volume" "rootdisk" {
 }
 
 locals {
-  datadisk_names = flatten([
-    for server_id in range(var.server.count): [
-      for disk_id, disk in var.server.disks: { 
-        name = "${var.server.name}${server_id}_disk${disk_id}.qcow2"
-        size = disk.size 
-      }
+  disks = flatten([
+    for sid in range(var.server.count): [
+      for did in range(var.server.disk_count): [ "${var.server.name}${sid}_disk${did}" ]
     ]
   ])
+  diskmap = [
+    for sid in range(var.server.count): [
+      for did in range(var.server.disk_count): { volume_id = "${libvirt_volume.datadisks["${var.server.name}${sid}_disk${did}"].id}" }
+    ]
+  ]
 }
-resource "libvirt_volume" "datadisk" {
-  count = length(datadisk_names)
-  name = datadisk_names[count.index].name
-  size = datadisk_names[count.index].size
+resource "libvirt_volume" "datadisks" {
+  for_each = toset(local.disks)
+  name = "${each.value}.qcow2"
+  size = var.server.disk_size
+  format = "qcow2"
 }
 
 resource "libvirt_domain" "server" {
@@ -61,22 +63,24 @@ resource "libvirt_domain" "server" {
   name = "${var.server.name}${count.index}"
   memory = "${var.server.memory}"
   vcpu = "${var.server.cpu}"
-
+ 
   cloudinit = libvirt_cloudinit_disk.commoninit.id
 
   disk { 
     volume_id = libvirt_volume.rootdisk[count.index].id
   }
 
-  #dynamic "disk" {
-  #  for_each = var.server.disks
-  #  content {
-  #    volume_id = libvirt_volume.datadisk[].id
-  #  }
-  #}
-   
+  dynamic "disk" {
+    for_each = local.diskmap[count.index]
+    content {
+      volume_id = disk.value["volume_id"]
+    }
+  }
+  
   network_interface {
     network_name = "default"
+    wait_for_lease = true
+    hostname = "${var.server.name}${count.index}"
   }
 
   console {
@@ -91,7 +95,6 @@ resource "libvirt_domain" "server" {
   }
 }
 
-output "ips" {
-  # show IP, run 'tofu refresh' if not populated
-  value = libvirt_domain.server.*.network_interface.0.addresses
+output "servers" {
+  value = libvirt_domain.server.*.network_interface.0.addresses.0
 }

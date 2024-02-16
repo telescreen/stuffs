@@ -16,14 +16,16 @@ variable "server" {
     count = number
     cpu = number
     memory = number
-    disks = optional(list(object({ size = number })))
+    disk_count = number
+    disk_size = number
   })
   default = {
     name = "ubuntu"
     count = 1
     cpu = 1
     memory = 1024
-    disks = null
+    disk_count = 0
+    disk_size = 1073741824
   }
 }
 
