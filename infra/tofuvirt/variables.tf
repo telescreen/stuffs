@@ -1,3 +1,22 @@
+variable "networks" {
+  type = list(object({
+    name = string
+    mode = string
+    domain = optional(string)
+    addresses = list(string)
+    dns_enabled = bool
+    dns_local_only = bool
+  }))
+  default = ([{
+    name = "private"
+    mode = "none"
+    domain = null
+    addresses = ["192.168.210.0/24"]
+    dns_enabled = false
+    dns_local_only = true
+  }])
+}
+
 variable "image" {
   type = object({
     id = string

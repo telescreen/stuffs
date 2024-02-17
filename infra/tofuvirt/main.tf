@@ -11,6 +11,35 @@ provider "libvirt" {
   uri = "qemu:///system"
 }
 
+locals {
+  disks = flatten([
+    for sid in range(var.server.count): [
+      for did in range(var.server.disk_count): [ "${var.server.name}${sid}_disk${did}" ]
+    ]
+  ])
+  diskmap = [
+    for sid in range(var.server.count): [
+      for did in range(var.server.disk_count): { volume_id = "${libvirt_volume.datadisks["${var.server.name}${sid}_disk${did}"].id}" }
+    ]
+  ]
+}
+
+resource "libvirt_network" "networks" {
+  for_each = { for index, net in var.networks: net.name => net}
+  name = each.value.name
+  mode = each.value.mode
+  domain = each.value.domain
+  addresses = each.value.addresses
+  dhcp {
+    enabled = true
+  }
+  dns {
+    enabled = each.value.dns_enabled
+    local_only = each.value.dns_local_only
+  }
+}
+
+
 data "template_file" "user_data" {
   template = file("${path.module}/cloud_init.cfg")
 }
@@ -39,18 +68,6 @@ resource "libvirt_volume" "rootdisk" {
   source         = "${var.image.source}"
 }
 
-locals {
-  disks = flatten([
-    for sid in range(var.server.count): [
-      for did in range(var.server.disk_count): [ "${var.server.name}${sid}_disk${did}" ]
-    ]
-  ])
-  diskmap = [
-    for sid in range(var.server.count): [
-      for did in range(var.server.disk_count): { volume_id = "${libvirt_volume.datadisks["${var.server.name}${sid}_disk${did}"].id}" }
-    ]
-  ]
-}
 resource "libvirt_volume" "datadisks" {
   for_each = toset(local.disks)
   name = "${each.value}.qcow2"
@@ -81,6 +98,13 @@ resource "libvirt_domain" "server" {
     network_name = "default"
     wait_for_lease = true
     hostname = "${var.server.name}${count.index}"
+  }
+
+  dynamic network_interface {
+    for_each = var.networks
+    content {
+      network_id = "${libvirt_network.networks["${network_interface.value.name}"].id}"
+    }
   }
 
   console {
