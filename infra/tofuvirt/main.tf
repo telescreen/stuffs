@@ -120,17 +120,23 @@ resource "libvirt_domain" "server" {
 }
 
 # output
+locals {
+  servers = merge(
+    zipmap(
+      libvirt_domain.server.*.name,
+      libvirt_domain.server.*.network_interface.0.addresses.0
+    )
+  )
+}
 
 output "servers" {
-  value = libvirt_domain.server.*.network_interface.0.addresses.0
+  value = local.servers
 }
 
 resource "local_file" "ansible_inventory" {
-  content = templatefile("${path.module}/inventory.tpl",
-    {
-        servers = libvirt_domain.server.*.network_interface.0.addresses.0
-    }
-  )
-  filename = "../ansible/inventory"
+  content = templatefile("${path.module}/inventory.tpl",{
+    servers = local.servers
+  })
+  filename = "../ansible/inventory/servers.ini"
   file_permission = "0644"
 }

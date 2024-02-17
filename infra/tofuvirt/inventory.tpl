@@ -1,5 +1,5 @@
 [servers]
-%{ for ip in servers  ~}
-${ip}
+%{ for name, ip in servers  ~}
+${ip} hostname=${name}
 %{ endfor ~}
 
