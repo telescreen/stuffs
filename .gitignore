@@ -6,3 +6,5 @@ crawlers/*.xls
 *.tfstate
 *.tfstate.*
 .terraform*
+
+infra/ansible/inventory

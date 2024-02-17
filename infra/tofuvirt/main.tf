@@ -36,7 +36,7 @@ resource "libvirt_cloudinit_disk" "commoninit" {
 resource "libvirt_volume" "rootdisk" {
   count          = var.server.count
   name           = "${var.server.name}${count.index}-root-disk.qcow2"
-  source         = "jammy-server-cloudimg-amd64.img"
+  source         = "${var.image.source}"
 }
 
 locals {
@@ -63,10 +63,10 @@ resource "libvirt_domain" "server" {
   name = "${var.server.name}${count.index}"
   memory = "${var.server.memory}"
   vcpu = "${var.server.cpu}"
- 
+
   cloudinit = libvirt_cloudinit_disk.commoninit.id
 
-  disk { 
+  disk {
     volume_id = libvirt_volume.rootdisk[count.index].id
   }
 
@@ -76,7 +76,7 @@ resource "libvirt_domain" "server" {
       volume_id = disk.value["volume_id"]
     }
   }
-  
+
   network_interface {
     network_name = "default"
     wait_for_lease = true
@@ -95,6 +95,18 @@ resource "libvirt_domain" "server" {
   }
 }
 
+# output
+
 output "servers" {
   value = libvirt_domain.server.*.network_interface.0.addresses.0
+}
+
+resource "local_file" "ansible_inventory" {
+  content = templatefile("${path.module}/inventory.tpl",
+    {
+        servers = libvirt_domain.server.*.network_interface.0.addresses.0
+    }
+  )
+  filename = "../ansible/inventory"
+  file_permission = "0644"
 }

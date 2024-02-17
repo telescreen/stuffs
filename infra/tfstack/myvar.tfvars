@@ -6,3 +6,4 @@ server_config = {
   flavor = "m1.2xlarge"
   key_name = "testkey"
 }
+windows_server_count = 0

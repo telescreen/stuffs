@@ -2,10 +2,12 @@ variable "image" {
   type = object({
     id = string
     url= string
+    source = string
   })
   default = {
     id = "jammy-server-cloudimg-amd64"
     url = "https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img"
+    source = "jammy-server-cloudimg-amd64.img"
   }
   sensitive = true
 }

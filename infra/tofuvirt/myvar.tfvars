@@ -1,3 +1,8 @@
+image = {
+  id = "jammy-server-cloudimg-amd64"
+  url = "https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img"
+  source = "../jammy-server-cloudimg-amd64.img"
+}
 server = {
   name = "ubuntu"
   count = 2
