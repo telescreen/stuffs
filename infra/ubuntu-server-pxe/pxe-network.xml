@@ -1,0 +1,12 @@
+<network connections='1'>
+  <name>pxe</name>
+  <bridge name='virpxe' stp='on' delay='0'/>
+  <ip address='192.168.123.1' netmask='255.255.255.0'>
+    <tftp root='/tftp'/>
+    <dhcp>
+      <range start='192.168.123.2' end='192.168.123.100'/>
+      <bootp file='pxelinux.0'/>
+    </dhcp>
+  </ip>
+</network>
+
