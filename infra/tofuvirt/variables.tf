@@ -50,3 +50,7 @@ variable "server" {
   }
 }
 
+variable "storage_pool" {
+  type = string
+  default = "default"
+}

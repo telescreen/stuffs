@@ -47,6 +47,7 @@ data "template_file" "user_data" {
 resource "libvirt_cloudinit_disk" "commoninit" {
   name      = "commoninit.iso"
   user_data = data.template_file.user_data.rendered
+  pool      = var.storage_pool
 }
 
 # Download from remote
@@ -66,6 +67,7 @@ resource "libvirt_volume" "rootdisk" {
   count          = var.server.count
   name           = "${var.server.name}${count.index}-root-disk.qcow2"
   source         = "${var.image.source}"
+  pool           = var.storage_pool
 }
 
 resource "libvirt_volume" "datadisks" {
