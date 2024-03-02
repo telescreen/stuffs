@@ -1,0 +1,16 @@
+version: "3.3"
+services:
+  cppbuild:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: cppbuild
+    container_name: cppbuild
+    userns_mode: keep-id
+    volumes:
+      - type: bind
+        source: .
+        target: /cppbuild
+    stdin_open: true
+    tty: true
+    working_dir: /cppbuild
