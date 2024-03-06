@@ -1,0 +1,10 @@
+network:
+  ethernets:
+    ens3:
+      dhcp4: true
+    ens4:
+      addresses: {{ back_ipaddress }}
+      gateway4: {{ back_gateway }}
+      mtu: 8192
+  version: 2
+  renderer: NetworkManager

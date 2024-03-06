@@ -1,0 +1,5 @@
+- name: Default Configurations
+  hosts: all
+  roles:
+    - common
+    - cephadm

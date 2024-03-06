@@ -116,7 +116,7 @@ resource "local_file" "ansible_inventory" {
         servers = local.test_servers
     }
   )
-  filename = "../ansible/inventory"
+  filename = "../ansible/servers.ini"
   file_permission = "0644"
 }
 

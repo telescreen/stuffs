@@ -1,6 +1,5 @@
 ---
 - name: Install MAAS
-  hosts: maas
   become: true
   tasks:
     - name: Install Necessary Packages

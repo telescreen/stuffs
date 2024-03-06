@@ -139,6 +139,6 @@ resource "local_file" "ansible_inventory" {
   content = templatefile("${path.module}/inventory.tpl",{
     servers = local.servers
   })
-  filename = "../ansible/inventory/servers.ini"
+  filename = "../ansible/servers.ini"
   file_permission = "0644"
 }

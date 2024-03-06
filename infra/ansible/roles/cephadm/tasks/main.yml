@@ -1,0 +1,16 @@
+- name: Install Docker
+  import_tasks: install_docker.yml
+
+- name: Installl cephadm
+  ansible.builtin.apt:
+    name: cephadm
+
+- name: Copy public key
+  become: true
+  ansible.builtin.copy:
+    src: /home/ubuntu/.ssh/authorized_keys
+    remote_src: true
+    dest: /root/.ssh/authorized_keys
+    owner: root
+    group: root
+    mode: 400

@@ -1,6 +1,0 @@
-maas:
-  hosts:
-    maas01:
-      ansible_host: 10.161.97.143
-  vars:
-    ansible_user: ubuntu

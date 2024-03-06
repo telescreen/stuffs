@@ -1,5 +1,7 @@
 [servers]
 %{ for name, ip in servers  ~}
-${ip} hostname=${name}
+${ip} ansible_host=${name}
 %{ endfor ~}
 
+[servers:vars]
+ansible_user=ubuntu

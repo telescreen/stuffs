@@ -1,0 +1,14 @@
+- name: Set server hostname
+  become: true
+  ansible.builtin.hostname:
+    name: "{{ hostname }}"
+
+- name: Generate /etc/hosts file
+  become: true
+  ansible.builtin.template:
+    src: hosts.j2
+    dest: /etc/hosts
+
+#- name: Reboot server after setup
+#  become: true
+#  ansible.builtin.reboot:
