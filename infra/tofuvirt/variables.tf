@@ -31,23 +31,23 @@ variable "image" {
   sensitive = true
 }
 
-variable "server" {
-  type = object({
+variable "servers" {
+  type = list(object({
     name = string
     count = number
     cpu = number
     memory = number
     disk_count = number
     disk_size = number
-  })
-  default = {
+  }))
+  default = [{
     name = "ubuntu"
     count = 1
     cpu = 1
     memory = 1024
     disk_count = 0
-    disk_size = 1073741824
-  }
+    disk_size = 8589934592
+  }]
 }
 
 variable "storage_pool" {
