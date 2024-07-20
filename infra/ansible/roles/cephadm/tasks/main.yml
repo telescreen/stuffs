@@ -2,15 +2,30 @@
   import_tasks: install_docker.yml
 
 - name: Installl cephadm
-  ansible.builtin.apt:
-    name: cephadm
+  import_tasks: install_cephadm.yml
 
-- name: Copy public key
+- name: Copy netplan settings to /etc/netplan/
   become: true
-  ansible.builtin.copy:
-    src: /home/ubuntu/.ssh/authorized_keys
-    remote_src: true
-    dest: /root/.ssh/authorized_keys
+  ansible.builtin.template:
+    src: 99-cephadm_netplan.yaml
+    dest: /etc/netplan/
     owner: root
     group: root
-    mode: 400
+    mode: 0644
+
+- name: Run netplan apply
+  become: true
+  ansible.builtin.command: netplan apply
+
+- name: Permit RootLogin
+  become: true
+  ansible.builtin.replace:
+    path: /etc/ssh/sshd_config
+    regexp: "#PermitRootLogin prohibit-password"
+    replace: "PermitRootLogin prohibit-password"
+
+- name: Reload sshd to reflect the change.
+  become: true
+  ansible.builtin.systemd_service:
+    state: restarted
+    name: sshd

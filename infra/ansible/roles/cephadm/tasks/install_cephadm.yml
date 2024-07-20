@@ -1,4 +1,5 @@
 - name: Installl cephadm
+  become: true
   ansible.builtin.apt:
     name: cephadm
 
@@ -10,5 +11,4 @@
     dest: /root/.ssh/authorized_keys
     owner: root
     group: root
-    mode: 400
-
+    mode: 0400
