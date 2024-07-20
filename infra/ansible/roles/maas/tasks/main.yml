@@ -1,41 +1,55 @@
----
-- name: Install MAAS
+- name: Template a file to /etc/netplan/90-maas.yaml
   become: true
-  tasks:
-    - name: Install Necessary Packages
-      ansible.builtin.apt:
-        pkg:
-        - acl
-    - name: Install MAAS from Snap 3.2/stable
-      community.general.snap:
-        name: maas
-        channel: 3.2/stable
-    - name: Install Postgres
-      ansible.builtin.apt:
-        pkg:
-        - postgresql
-        - postgresql-contrib
-        - python3-psycopg2
-    - name: Create postgres maas user
-      become_user: postgres
-      community.postgresql.postgresql_user:
-        name: maas
-        password: password
-      environment:
-        PGOPTIONS: "-c password_encryption=scram-sha-256"
-    - name: Create maasdb database
-      become_user: postgres
-      community.postgresql.postgresql_db:
-        name: maasdb
-        owner: maas
-    - name: Add permission to login maasdb from localhost
-      ansible.builtin.lineinfile:
-        path: /etc/postgresql/14/main/pg_hba.conf
-        line: "host    maasdb    maas    0/0     scram-sha-256"
-        insertafter: EOF
-        regexp: "^host\t*maasdb"
-    - name: Initialize MAAS
-      ansible.builtin.expect:
-        command: "sudo maas init region+rack --database-uri postgres://maas:password@localhost/maasdb"
-        responses:
-          "MAAS URL.*": \n
+  ansible.builtin.template:
+    src: maas-netplan.j2
+    dest: /etc/netplan/90-maas.yaml
+    owner: root
+    group: root
+    mode: '0644'
+- name: Run netplan apply
+  become: true
+  ansible.builtin.command: netplan apply
+- name: Install Necessary Packages
+  become: true
+  ansible.builtin.apt:
+    pkg:
+    - acl
+- name: Install MAAS from Snap 3.4/stable
+  become: true
+  community.general.snap:
+    name: maas
+    channel: 3.4/stable
+- name: Install Postgres
+  become: true
+  ansible.builtin.apt:
+    pkg:
+    - postgresql
+    - postgresql-contrib
+    - python3-psycopg2
+- name: Create postgres maas user
+  become: true
+  become_user: postgres
+  community.postgresql.postgresql_user:
+    name: maas
+    password: password
+  environment:
+    PGOPTIONS: "-c password_encryption=scram-sha-256"
+- name: Create maasdb database
+  become: true
+  become_user: postgres
+  community.postgresql.postgresql_db:
+    name: maasdb
+    owner: maas
+- name: Add permission to login maasdb from localhost
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/postgresql/14/main/pg_hba.conf
+    line: "host    maasdb    maas    0/0     scram-sha-256"
+    insertafter: EOF
+    regexp: "^host\t*maasdb"
+      #- name: Initialize MAAS
+      #  ansible.builtin.expect:
+      #    command: "sudo maas init region+rack --database-uri postgres://maas:password@localhost/maasdb"
+      #    responses:
+      #      "MAAS URL.*": \n
+

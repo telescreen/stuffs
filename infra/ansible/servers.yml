@@ -1,5 +1,5 @@
 - name: Default Configurations
-  hosts: all
+  hosts: maas
   roles:
     - common
-    - cephadm
+    - maas
