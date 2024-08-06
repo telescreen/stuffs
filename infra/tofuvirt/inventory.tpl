@@ -1,6 +1,6 @@
 [servers]
 %{ for name, ip in servers  ~}
-${ip} ansible_host=${name}
+${ip} hostname=${name}
 %{ endfor ~}
 
 [servers:vars]

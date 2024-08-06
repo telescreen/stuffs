@@ -3,15 +3,25 @@ variable "networks" {
     name = string
     mode = string
     domain = optional(string)
+    dhcp_enabled = bool
     addresses = list(string)
     dns_enabled = bool
     dns_local_only = bool
   }))
   default = ([{
+    name = "default"
+    mode = "nat"
+    domain = null
+    dhcp_enabled=false
+    addresses = ["192.168.10.0/24"]
+    dns_enabled = false
+    dns_local_only = true
+  }, {
     name = "private"
     mode = "none"
     domain = null
-    addresses = ["192.168.210.0/24"]
+    dhcp_enabled=false
+    addresses = ["192.168.21.0/24"]
     dns_enabled = false
     dns_local_only = true
   }])

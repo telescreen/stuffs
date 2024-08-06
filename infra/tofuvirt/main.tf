@@ -39,7 +39,7 @@ resource "libvirt_network" "networks" {
   domain = each.value.domain
   addresses = each.value.addresses
   dhcp {
-    enabled = true
+    enabled = each.value.dhcp_enabled
   }
   dns {
     enabled = each.value.dns_enabled
