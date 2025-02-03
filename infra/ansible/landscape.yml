@@ -1,0 +1,5 @@
+- name: Default Configurations
+  hosts: landscape_server
+  roles:
+    - common
+    - landscape

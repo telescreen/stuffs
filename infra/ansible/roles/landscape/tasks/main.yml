@@ -1,0 +1,24 @@
+- name: Install necessary packages for Landscape
+  become: true
+  ansible.builtin.apt:
+    pkg:
+      - ca-certificates
+      - software-properties-common
+    state: latest
+    update_cache: true
+
+- name: Add Landscape repository
+  become: yes
+  ansible.builtin.apt_repository:
+    repo: ppa:landscape/self-hosted-24.04
+    state: present
+
+- name: run apt update
+  become: yes
+  apt:
+    update_cache: yes
+
+- name: Install landscape-server-quickstart
+  become: yes
+  apt:
+    name: landscape-server-quickstart
