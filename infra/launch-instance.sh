@@ -9,11 +9,12 @@ Help() {
     echo
     echo "Syntax: lauch [options] <server_name>"
     echo "options: "
-    echo "    -s | --serie  :  Ubuntu Series: noble(24.04), jammy(22.04), focal(20.04), bionic(18.04)"
-    echo "    -c | --cpu    :  CPU Core. Default: 2"
-    echo "    -m | --memroy :  Memory. Default: 2048KB"
-    echo "    -d | --disk   :  Disk size. Default 40GB"
-    echo "    -h | --help   :  Display this help"
+    echo "    -s | --serie      :  Ubuntu Series: noble(24.04), jammy(22.04), focal(20.04), bionic(18.04)"
+    echo "    -c | --cpu        :  CPU Core. Default: 2"
+    echo "    -m | --memroy     :  Memory. Default: 2048MB"
+    echo "    -d | --disk       :  Disk size. Default 40GB"
+    echo "    -t | --cloudinit  :  Cloud-init file to use"
+    echo "    -h | --help       :  Display this help"
     echo
     exit
 }
@@ -26,6 +27,39 @@ DownloadImage() {
     fi
 }
 
+CloudInit() {
+### CLOUD_INIT ###
+    # password: possible
+    rm -f ${CLOUD_INIT_IMG}
+    rm -f cloud_init.cfg
+
+    if [ -z "$CLOUDINIT_FILE" ]; then
+        cat > cloud_init.cfg <<EOF
+#cloud-config
+timezone: Asia/Tokyo
+locale: en_US.utf8
+package_update: True
+package_upgrade: True
+hostname: ${INSTANCE_NAME}
+chpasswd:
+  expire: False
+users:
+  - name: ubuntu
+    ssh_import_id:
+      - gh:telescreen
+    lock_passwd: false
+    passwd: "\$6\$0SSkAaAjMmpvEAmH\$J.a1O3IhQ5EejvtALUdt9DUEtZ6K9eTq4ICClDAu6ngAeMMrmDK/hSfW3URZ92LjdD4MTnJ/yJmSn1oRwEZox/"
+    shell: /bin/bash
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    uid: 1000
+EOF
+        cloud-localds ${CLOUD_INIT_IMG} cloud_init.cfg
+    else
+        cloud-localds ${CLOUD_INIT_IMG} ${CLOUDINIT_FILE}
+    fi
+
+}
+
 error() { echo "$*" >&2; exit 2; }
 need_arg() { if [ -z "$OPTARG" ]; then error "No argument for --${OPT} option"; fi }
 
@@ -36,8 +70,9 @@ CLOUD_INIT_IMG=cloud_init.img
 CPU=2
 MEMORY=2048
 DISK_SIZE=40  # Gigabytes
+CLOUDINIT_FILE=
 
-while getopts "hc:m:d:s:" OPT; do
+while getopts "hc:m:d:s:t:" OPT; do
     if [ "$OPT" = "-" ]; then
         OPT="${OPTARG%%=*}"
         OPTARG="${OPTARG#"$OPT"}"
@@ -58,6 +93,9 @@ while getopts "hc:m:d:s:" OPT; do
         s|serie) 
             need_arg;
             UBUNTU_SERIES="${OPTARG}";;
+        t|cloudinit)
+            need_arg
+            CLOUDINIT_FILE="${OPTARG}";;
 	*) error "Unknown option -- $OPT";;
     esac
 done
@@ -67,11 +105,13 @@ BASE_IMAGE="${UBUNTU_SERIES}-server-cloudimg-amd64.img"
 
 if [ -z "${INSTANCE_NAME}" ]
 then
-    error "<instance_name> is necessary"
+    Help
 fi
 
-DownloadImage
 
+DownloadImage
+echo "---- Generating cloudinit script ----"
+CloudInit
 echo "---- Launching ${INSTANCE_NAME}...Ubuntu: ${UBUNTU_SERIES}. CPU: ${CPU}. Memory: ${MEMORY}. Disk: ${DISK_SIZE} ----"
 
 ### DISK ###
@@ -80,30 +120,6 @@ then
   qemu-img create -f qcow2 -F qcow2 -b ${BASE_IMAGE} ${INSTANCE_NAME}.qcow2 ${DISK_SIZE}G
 fi
 
-### CLOUD_INIT ###
-# password: possible
-rm -f ${CLOUD_INIT_IMG}
-rm -f cloud_init.cfg
-cat > cloud_init.cfg <<EOF
-#cloud-config
-timezone: Asia/Tokyo
-locale: en_US.utf8
-package_update: True
-package_upgrade: True
-hostname: ${INSTANCE_NAME}
-chpasswd:
-  expire: False
-users:
-  - name: ubuntu
-    ssh_import_id:
-      - gh:telescreen
-    lock_passwd: false
-    passwd: "\$6\$0SSkAaAjMmpvEAmH\$J.a1O3IhQ5EejvtALUdt9DUEtZ6K9eTq4ICClDAu6ngAeMMrmDK/hSfW3URZ92LjdD4MTnJ/yJmSn1oRwEZox/"
-    shell: /bin/bash
-    sudo: ALL=(ALL) NOPASSWD:ALL
-    uid: 1000
-EOF
-cloud-localds ${CLOUD_INIT_IMG} cloud_init.cfg
 
 virt-install    \
   --os-variant ubuntu${UBUNTU_SERIES} \
