@@ -1,0 +1,64 @@
+#cloud-config
+no-log-init: true
+preserve_hostname: false
+fqdn: sts.test
+hostname: adserver
+users:
+  - name: ubuntu
+    gecos: Ubuntu User
+    primary_group: ubuntu
+    groups: users
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    lock_passwd: false
+    passwd: "$6$0SSkAaAjMmpvEAmH$J.a1O3IhQ5EejvtALUdt9DUEtZ6K9eTq4ICClDAu6ngAeMMrmDK/hSfW3URZ92LjdD4MTnJ/yJmSn1oRwEZox/"
+    ssh_import_id:
+      - gh:telescreen
+packages:
+ - crudini
+ - debconf-utils
+ - krb5-kdc
+ - libnss-winbind
+ - libpam-krb5
+ - libpam-winbind
+ - net-tools
+ - openssh-server
+ - samba
+ - smbclient
+ - winbind
+write_files:
+  - path: "/tmp/krb5-config.debconf"
+    permissions: "0644"
+    owner: "root"
+    content: |
+      krb5-config     krb5-config/add_servers_realm   string STS.TEST
+      krb5-config     krb5-config/default_realm       string STS.TEST
+      krb5-config     krb5-config/read_conf           boolean true
+  - path: "/tmp/post-install.sh"
+    permissions: "0755"
+    owner: "root"
+    # Because these aren't in DNS, we stuff in the IPs manually, but we can't
+    # do it with variables here, because the DHCP IP isn't known yet, so must
+    # execute it inside the booted, networked machine
+    content: |
+      #!/bin/bash
+      echo '127.0.0.1 localhost' > /etc/hosts
+      echo "$(hostname -I)  $(hostname) $(hostname).sts.test" >> /etc/hosts
+runcmd:
+  - [ /tmp/post-install.sh ]
+  - [ mv, /etc/samba/smb.conf, /etc/samba/smb.conf.orig ]
+  - [ mv, /etc/krb5.conf, /etc/krb5.conf.orig ]
+  - [ debconf-set-selections, /tmp/krb5-config.debconf ]
+  - [ dpkg-reconfigure, -fnoninteractive, krb5-config ]
+  - [ samba-tool, domain, provision, --use-rfc2307, --realm=STS.TEST, --domain=STS, "--adminpass=Passw0rd" ]
+  - [ systemctl, mask, smbd, nmbd, winbind ]
+  - [ systemctl, disable, smbd, nmbd, winbind ]
+  - [ systemctl, stop, smbd, nmbd, winbind ]
+  - [ systemctl, unmask, samba-ad-dc ]
+  - [ systemctl, start, samba-ad-dc ]
+  - [ systemctl, enable, samba-ad-dc ]
+  - [ cp, /var/lib/samba/private/krb5.conf, /etc ]
+  - [ systemctl, stop, systemd-resolved.service ]
+  - [ systemctl, disable, systemd-resolved.service ]
+  - [ systemctl, restart, samba-ad-dc ]
+
