@@ -1,0 +1,17 @@
+network:
+    ethernets:
+        ens4:
+            dhcp4: false
+            dhcp6: false
+            accept-ra: false
+            link-local: []
+        ens5:
+            dhcp4: true
+            dhcp6: false
+            addresses:
+            - {{ ens5_ip }}
+            routes:
+            - to: default
+              via: {{ ens5_gw }}
+    version: 2
+

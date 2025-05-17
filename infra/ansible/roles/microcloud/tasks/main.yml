@@ -1,0 +1,49 @@
+- name: Install microceph from snapstore
+  become: true
+  community.general.snap:
+    name: microceph                                              
+    channel: squid/stable
+
+- name: Install microovn from snapstore
+  become: true
+  community.general.snap:
+    name: microovn                                              
+    channel: 24.03/stable
+
+- name: Install microcloud from snapstore
+  become: true
+  community.general.snap:
+    name: microcloud                                              
+    channel: 2/stable
+
+- name: Install LXD from snapstore
+  become: true
+  community.general.snap:
+    name: lxd                                              
+    channel: 5.21/stable
+
+- name: Configure network for ens4 and ens5
+  become: true
+  ansible.builtin.template:
+    src: 90-microcloud.yaml.j2
+    dest: /etc/netplan/90-microcloud.yaml
+    owner: root
+    mode: 400
+
+- name: Execute netplan apply
+  become: true
+  ansible.builtin.command: netplan apply
+
+
+- name: Generate microcloud preseed
+  ansible.builtin.template:
+    src: microcloud-preseed.yaml
+    dest: /home/ubuntu/microcloud-preseed.yaml
+
+#- name: Execute microcloud Initialization
+#  become: true
+#  become_user: root
+#  ansible.builtin.shell: cat microcloud-preseed.yaml | microcloud preseed 
+#  args:
+#    chdir: /home/ubuntu
+

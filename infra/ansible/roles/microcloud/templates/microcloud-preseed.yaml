@@ -1,0 +1,34 @@
+lookup_subnet: 192.168.10.0/24
+initiator: cloud00
+session_passphrase: verysecretfoo
+systems:
+- name: cloud00
+  ovn_uplink_interface: ens4
+  storage:
+    local:
+      path: /dev/vdb
+    ceph:
+      - path: /dev/vdc
+- name: cloud01
+  ovn_uplink_interface: ens4
+  storage:
+    local:
+      path: /dev/vdb
+    ceph:
+      - path: /dev/vdc
+- name: cloud02
+  ovn_uplink_interface: ens4
+  storage:
+    local:
+      path: /dev/vdb
+    ceph:
+      - path: /dev/vdc
+
+ceph:
+  cephfs: true
+  internal_network: 192.168.31.0/24
+  public_network: 192.168.31.0/24
+
+ovn:
+  ipv4_gateway: 192.168.21.1/24
+  ipv4_range: 192.168.21.100-192.168.21.254
