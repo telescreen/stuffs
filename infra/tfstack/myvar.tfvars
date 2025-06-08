@@ -1,9 +1,24 @@
-server_count = 3
-server_config = {
-  name = "microk8s"
-  image = "auto-sync/ubuntu-focal-daily-amd64-server-20230823-disk1.img"
-  win_image = "Windows2019-virtio"
-  flavor = "m1.2xlarge"
-  key_name = "testkey"
-}
-windows_server_count = 0
+servers = [{
+    count = 1
+    name = "adserver"
+    image_id = "293cbf09-4dfa-4acf-8e59-63b5197f2644"
+    flavor = "staging-cpu4-ram8-disk20"
+    networks = ["net_stg-reproducer-telescreen-pse"]
+    key_name = "lpkey"
+    volume_count = 0
+    volume_size = 10
+    user_data_file = "cloud_init.cfg"
+  },
+  {
+    count = 1
+    name = "adclient"
+    image_id = "293cbf09-4dfa-4acf-8e59-63b5197f2644"
+    flavor = "staging-cpu4-ram8-disk20"
+    networks = ["net_stg-reproducer-telescreen-pse"]
+    key_name = "lpkey"
+    volume_count = 0
+    volume_size = 10
+    user_data_file = "cloud_init.cfg"
+  }
+]
+
