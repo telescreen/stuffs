@@ -1,0 +1,33 @@
+#cloud-config
+no-log-init: true
+preserve_hostname: false
+fqdn: sts.test
+hostname: adclient
+users:
+  - name: ubuntu
+    gecos: Ubuntu User
+    primary_group: ubuntu
+    groups: users
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    lock_passwd: false
+    passwd: "$6$0SSkAaAjMmpvEAmH$J.a1O3IhQ5EejvtALUdt9DUEtZ6K9eTq4ICClDAu6ngAeMMrmDK/hSfW3URZ92LjdD4MTnJ/yJmSn1oRwEZox/"
+    ssh_import_id:
+      - gh:telescreen
+network:
+  version: 2
+  ethernets: 
+    ens3:
+      dhcp4-overrides:
+        use-dns: false
+        use-domains: false
+      nameservers:
+        search: [sts.test]
+
+packages:
+  - sssd-ad 
+  - sssd-tools 
+  - realmd
+  - adcli
+  - krb5-user
+
