@@ -1,4 +1,4 @@
 [servers]
-%{ for name, ip in servers ~}
-${ip} hostname=${name}
+%{ for name, spec in servers ~}
+${spec.network[0].fixed_ip_v4} hostname=${name}
 %{ endfor ~}

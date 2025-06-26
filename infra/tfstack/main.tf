@@ -21,12 +21,21 @@ locals {
         image_id = "${sv.image_id}"
         flavor = "${sv.flavor}"
         networks = "${sv.networks}"
+        floatingip_net = "${sv.floatingip_net}"
         key_name = "${sv.key_name}"
         user_data_file = "${sv.user_data_file}"
+        root_volume_size = "${sv.root_volume_size}"
         volumeid = [ for d in range(sv.volume_count): "${sv.name}${i}${j}_vol${d}" ]
       }
     ]
   ])
+  fips = flatten([
+    for i, sv in var.servers: [
+      for j in range(sv.count): {
+         pool = "${sv.floatingip_net}",
+         id = i * sv.count + j
+      } if sv.floatingip_net != ""
+  ]])
   volumes = flatten([
     for i, sv in var.servers: [
       for j in range(sv.count): [
@@ -88,35 +97,35 @@ resource "openstack_blockstorage_volume_v3" "volumes" {
 
 # SERVERS
 resource "openstack_compute_instance_v2" "servers" {
-  count           = length(local.servers)
-  name            = local.servers[count.index].name
-  flavor_name     = local.servers[count.index].flavor
-  key_pair        = local.servers[count.index].key_name
+  for_each        = tomap({ for sv in local.servers: sv.name => sv })
+  name            = each.value.name
+  flavor_name     = each.value.flavor
+  key_pair        = each.value.key_name
   #security_groups = ["default", "${var.networks.name}_secgroup"]
-  user_data       = file(local.servers[count.index].user_data_file)
+  user_data       = file(each.value.user_data_file)
 
   metadata = {
     origin = "Launched by Opentofu"
   }
 
   dynamic network {
-    for_each = local.servers[count.index].networks
+    for_each = each.value.networks
     content {
       name = network.value
     }
   }
 
   block_device {
-    uuid                  = local.servers[count.index].image_id
+    uuid                  = each.value.image_id
     source_type           = "image"
-    volume_size           = 30
+    volume_size           = each.value.root_volume_size
     boot_index            = 0
     destination_type      = "volume"
     delete_on_termination = true
   }
 
   dynamic block_device {
-    for_each = toset(local.servers[count.index].volumeid)
+    for_each = toset(each.value.volumeid)
       content {
         uuid                  = openstack_blockstorage_volume_v3.volumes[block_device.key].id
         boot_index            = -1
@@ -125,24 +134,37 @@ resource "openstack_compute_instance_v2" "servers" {
         delete_on_termination = true
       }
    }
+
+   depends_on = [
+     openstack_blockstorage_volume_v3.volumes
+   ]
+}
+
+# FLOATING IPS
+resource "openstack_compute_floatingip_v2" "fips" {
+  for_each = { for sv in local.servers: sv.name => sv.floatingip_net if sv.floatingip_net != ""  }
+  pool = each.value
+}
+
+resource "openstack_compute_floatingip_associate_v2" "fips_asso" {
+  for_each = openstack_compute_floatingip_v2.fips
+  floating_ip = each.value.address
+  instance_id = openstack_compute_instance_v2.servers[each.key].id
 }
 
 ## OUTPUTS
-locals {
-  test_servers = merge(
-     zipmap(openstack_compute_instance_v2.servers[*].name,
-     openstack_compute_instance_v2.servers[*].network[0].fixed_ip_v4)
-  )
+output "test_servers" {
+  value = openstack_compute_instance_v2.servers
+  sensitive = true
 }
 
 resource "local_file" "ansible_inventory" {
   content = templatefile("${path.module}/inventory.tpl",
     {
-        servers = local.test_servers
+        servers = openstack_compute_instance_v2.servers
     }
   )
   filename = "servers.ini"
   file_permission = "0644"
 }
-
 

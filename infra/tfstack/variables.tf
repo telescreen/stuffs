@@ -54,7 +54,9 @@ variable "servers" {
     image_id = string
     flavor = string
     networks = list(string)
+    floatingip_net = string
     key_name = string
+    root_volume_size = number
     volume_count = number
     volume_size = number
     user_data_file = string
@@ -65,7 +67,9 @@ variable "servers" {
     image_id = "293cbf09-4dfa-4acf-8e59-63b5197f2644"
     flavor = "staging-cpu4-ram8-disk20"
     networks = ["net_stg-reproducer-telescreen-pse", "telescreen_private_test_network"]
+    floatingip_net = ""
     key_name = "lpkey"
+    root_volume_size = 10
     volume_count = 1
     volume_size = 10
     user_data_file = "cloud_init.cfg"
