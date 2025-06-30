@@ -12,10 +12,9 @@ users:
     ssh_import_id:
       - gh:telescreen
 
-packages:
-  - sssd-ad 
-  - sssd-tools 
-  - realmd
-  - adcli
-  - krb5-user
-
+snap:
+  commands:
+    0: snap install lxd --channel=5.21/stable --cohort="+"
+    1: snap install microceph --channel=squid/stable --cohort="+"
+    2: snap install microovn --channel=24.03/stable --cohort="+"
+    4: snap install microcloud --channel=2/stable --cohort="+"
