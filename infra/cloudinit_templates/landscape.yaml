@@ -1,0 +1,27 @@
+#cloud-config
+no-log-init: true
+users:
+  - name: ubuntu
+    gecos: Ubuntu User
+    primary_group: ubuntu
+    groups: users
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    lock_passwd: false
+    passwd: "$6$0SSkAaAjMmpvEAmH$J.a1O3IhQ5EejvtALUdt9DUEtZ6K9eTq4ICClDAu6ngAeMMrmDK/hSfW3URZ92LjdD4MTnJ/yJmSn1oRwEZox/"
+    ssh_import_id:
+      - gh:telescreen
+
+apt:
+  sources:
+    landscape.list:
+      source: ppa:landscape/self-hosted-24.04
+      #source: ppa:landscape/stable
+
+packages:
+  - ca-certificates 
+  - software-properties-common
+  - landscape-server-quickstart
+  - landscape-client
+
+runcmd: 
