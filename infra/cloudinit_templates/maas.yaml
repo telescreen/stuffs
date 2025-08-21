@@ -1,0 +1,38 @@
+#cloud-config
+no-log-init: true
+users:
+  - name: ubuntu
+    gecos: Ubuntu User
+    primary_group: ubuntu
+    groups: users
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    lock_passwd: false
+    passwd: "$6$0SSkAaAjMmpvEAmH$J.a1O3IhQ5EejvtALUdt9DUEtZ6K9eTq4ICClDAu6ngAeMMrmDK/hSfW3URZ92LjdD4MTnJ/yJmSn1oRwEZox/"
+    ssh_import_id:
+      - gh:telescreen
+
+snap:
+  commands:
+    0: snap install --channel=3.5/stable maas
+
+packages:
+  - postgresql
+
+write_files:
+  - owner: ubuntu:ubuntu
+    path: /tmp/initmaas.sh
+    permissions: 0755
+    content: |
+      #!/bin/bash
+      MAAS_IP=`ip -4 addr show ens3 | grep -oP 'inet \K[\d.]+'` 
+      sudo maas init region+rack --database-uri "postgres://maas:maaspw@127.0.0.1/maas" --maas-url http://${MAAS_IP}:5240/MAAS
+      sudo maas createadmin --password adminpw --username admin --email admin@local
+      sudo maas apikey --username admin > admin_apikey
+      maas login admin http://${MAAS_IP}:5240/MAAS $(cat admin_apikey)
+
+
+runcmd: 
+  - sudo -i -u postgres psql -c "CREATE USER \"maas\" WITH ENCRYPTED PASSWORD 'maaspw'"
+  - sudo -i -u postgres createdb -O "maas" "maas"
+  - echo "host    maas   maas   0/0     md5"  | tee -a /etc/postgresql/16/main/pg_hba.conf
