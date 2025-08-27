@@ -1,0 +1,83 @@
+#cloud-config
+no-log-init: true
+users:
+  - name: ubuntu
+    gecos: Ubuntu User
+    primary_group: ubuntu
+    groups: users
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    lock_passwd: false
+    passwd: "$6$0SSkAaAjMmpvEAmH$J.a1O3IhQ5EejvtALUdt9DUEtZ6K9eTq4ICClDAu6ngAeMMrmDK/hSfW3URZ92LjdD4MTnJ/yJmSn1oRwEZox/"
+    ssh_import_id:
+      - gh:telescreen
+
+apt:
+  debconf_selections:
+    opt1: slapd slapd/internal/generated_adminpw password passw0rd
+    opt2: slapd slapd/password2 password passw0rd
+    opt3: slapd slapd/internal/adminpw password passw0rd
+    opt4: slapd slapd/password1 password passw0rd
+    opt5: slapd slapd/domain string example.com
+    opt6: slapd shared/organization string Example
+
+packages:
+  - slapd
+  - slapd-contrib
+  - ldap-utils
+  - ldapscripts
+
+write_files:
+  - owner: root:root
+    path: /root/add-content.ldif
+    permissions: 0755
+    content: |
+      dn: ou=Users,dc=example,dc=com
+      objectClass: organizationalUnit
+      ou: Users
+
+      dn: ou=Groups,dc=example,dc=com
+      objectClass: organizationalUnit
+      ou: Groups
+
+      dn: uid=telescreen,ou=Users,dc=example,dc=com
+      objectClass: inetOrgPerson
+      objectClass: posixAccount
+      objectClass: shadowAccount
+      uid: telescreen
+      sn: Tele
+      givenName: Screen
+      cn: Tele Screen
+      displayName: telescreen
+      uidNumber: 10000
+      gidNumber: 5000
+      userPassword: passw0rd
+      gecos: Tele Screen
+      loginShell: /bin/bash
+      homeDirectory: /home/telescreen
+
+  - owner: root:root
+    path: /etc/ldapscripts/ldapscripts.conf
+    permissions: 0644
+    content: |
+      SERVER=ldap://slapd00.example.com
+      LDAPBINOPTS="-ZZ"
+      BINDDN='cn=admin,dc=example,dc=com'
+      BINDPWDFILE="/etc/ldapscripts/ldapscripts.passwd"
+      SUFFIX='dc=example,dc=com'
+      GSUFFIX='ou=Groups'
+      USUFFIX='ou=Users'
+      MSUFFIX='ou=Computers'
+
+  - owner: root:root
+    path: /root/initldap.sh
+    permissions: 0755
+    content: |
+      #!/bin/bash
+      sudo ldapadd -x -D cn=admin,dc=example,dc=com -W -f add-content.ldif
+      # ldapsearch -x -LLL -b dc=example,dc=com '(uid=john)' cn gidNumber
+
+runcmd: 
+  - echo -n 'passw0rd' | sudo tee /etc/ldapscripts/ldapscripts.passwd
+  - sudo chmod 400 /etc/ldapscripts/ldapscripts.passwd
+
