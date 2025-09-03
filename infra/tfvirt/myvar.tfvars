@@ -32,4 +32,4 @@ servers = [{
   disk_size = 8589934592
 }]
 
-storage_pool = "default"
+#storage_pool = "default"
