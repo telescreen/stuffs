@@ -20,6 +20,7 @@ locals {
         memory = sv.memory
         rootvol = "${sv.name}${i}${j}"
         volumeid = [ for d in range(sv.disk_count): "${sv.name}${i}${j}_vol${d}" ]
+        cloudinit_file = "${sv.cloudinit_file}"
       }
     ]
   ])
@@ -48,13 +49,15 @@ resource "libvirt_network" "networks" {
 }
 
 
-data "template_file" "user_data" {
-  template = file("${path.module}/cloud_init.cfg")
-}
+#data "template_file" "user_data" {
+#  count = length(local.servers)
+#  template = file(local.servers[count.index].cloudinit_file)
+#}
 
 resource "libvirt_cloudinit_disk" "commoninit" {
-  name      = "commoninit.iso"
-  user_data = data.template_file.user_data.rendered
+  count     = length(local.servers)
+  name      = "${local.servers[count.index].name}_cloudinit.iso"
+  user_data = file(local.servers[count.index].cloudinit_file)
   pool      = var.storage_pool
 }
 
@@ -76,46 +79,46 @@ resource "libvirt_volume" "volumes" {
 }
 
 resource "libvirt_domain" "server" {
- count = length(local.servers)
- name = local.servers[count.index].name
- memory = local.servers[count.index].memory
- vcpu = local.servers[count.index].vcpu
-
- cloudinit = libvirt_cloudinit_disk.commoninit.id
-
- disk {
-   volume_id = "${libvirt_volume.rootvols["${local.servers[count.index].name}"].id}"
- }
-
-dynamic "disk" {
-  for_each = toset(local.servers[count.index].volumeid)
-  content {
-    volume_id = libvirt_volume.volumes[disk.key].id
+  count = length(local.servers)
+  name = local.servers[count.index].name
+  memory = local.servers[count.index].memory
+  vcpu = local.servers[count.index].vcpu
+ 
+  cloudinit = libvirt_cloudinit_disk.commoninit[count.index].id
+ 
+  disk {
+    volume_id = "${libvirt_volume.rootvols["${local.servers[count.index].name}"].id}"
   }
-}
-
- network_interface {
-   network_name = "default"
-   wait_for_lease = true
- }
-
- dynamic network_interface {
-   for_each = var.networks
-   content {
-     network_id = "${libvirt_network.networks["${network_interface.value.name}"].id}"
-   }
- }
-
- console {
-   type = "pty"
-   target_port = "0"
- }
-
- graphics {
-   type = "spice"
-   listen_type = "address"
-   autoport = "true"
- }
+ 
+  dynamic "disk" {
+    for_each = toset(local.servers[count.index].volumeid)
+    content {
+      volume_id = libvirt_volume.volumes[disk.key].id
+    }
+  }
+ 
+  network_interface {
+    network_name = "default"
+    wait_for_lease = true
+  }
+ 
+  dynamic network_interface {
+    for_each = var.networks
+    content {
+      network_id = "${libvirt_network.networks["${network_interface.value.name}"].id}"
+    }
+  }
+ 
+  console {
+    type = "pty"
+    target_port = "0"
+  }
+ 
+  graphics {
+    type = "spice"
+    listen_type = "address"
+    autoport = "true"
+  }
 }
 
 locals {

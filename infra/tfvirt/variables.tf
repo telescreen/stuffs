@@ -49,6 +49,7 @@ variable "servers" {
     memory = number
     disk_count = number
     disk_size = number
+    cloudinit_file = string
   }))
   default = [{
     name = "ubuntu"
@@ -57,6 +58,7 @@ variable "servers" {
     memory = 1024
     disk_count = 0
     disk_size = 8589934592
+    cloudinit_file = "cloud_init.cfg"
   }]
 }
 
