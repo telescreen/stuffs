@@ -5,3 +5,6 @@ ${ip} hostname=${name}
 
 [servers:vars]
 ansible_user=ubuntu
+%{ for network in networks ~}
+${network.name}=${network.addresses[0]}
+%{ endfor ~}

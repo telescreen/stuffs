@@ -20,6 +20,7 @@ locals {
         memory = sv.memory
         rootvol = "${sv.name}${i}${j}"
         volumeid = [ for d in range(sv.disk_count): "${sv.name}${i}${j}_vol${d}" ]
+        networks = sv.networks
         cloudinit_file = "${sv.cloudinit_file}"
       }
     ]
@@ -96,16 +97,16 @@ resource "libvirt_domain" "server" {
       volume_id = libvirt_volume.volumes[disk.key].id
     }
   }
- 
+
   network_interface {
     network_name = "default"
     wait_for_lease = true
   }
- 
+
   dynamic network_interface {
-    for_each = var.networks
+    for_each = toset(local.servers[count.index].networks)
     content {
-      network_id = "${libvirt_network.networks["${network_interface.value.name}"].id}"
+      network_name = network_interface.key
     }
   }
  
@@ -133,6 +134,7 @@ locals {
 resource "local_file" "ansible_inventory" {
   content = templatefile("${path.module}/inventory.tpl",{
     servers = local.outservers
+    networks = libvirt_network.networks
   })
   filename = "../ansible/servers.ini"
   file_permission = "0644"

@@ -47,6 +47,7 @@ variable "servers" {
     count = number
     cpu = number
     memory = number
+    networks = list(string)
     disk_count = number
     disk_size = number
     cloudinit_file = string
@@ -56,6 +57,7 @@ variable "servers" {
     count = 1
     cpu = 1
     memory = 1024
+    networks = ["default"]
     disk_count = 0
     disk_size = 8589934592
     cloudinit_file = "cloud_init.cfg"
